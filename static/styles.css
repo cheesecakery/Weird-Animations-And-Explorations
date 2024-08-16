@@ -1,0 +1,53 @@
+.header {
+    background-color: #fcba03;
+    color: #ffffff;
+
+    padding: 2rem 2rem 1rem 2rem;
+    text-align: center;
+    overflow: visible;
+}
+
+h1 a,
+h1 a:hover {
+    font-size: 3vw;
+    letter-spacing: 20px;
+    text-decoration: none;
+    color: #feffa8;
+    /* text-shadow: -10px 5px 10px #b08100; */
+
+    outline: 10px solid transparent;
+    -webkit-mask-image: linear-gradient(-75deg, rgba(0,0,0,.6) 30%, #000 50%, rgba(0,0,0,.6) 70%);
+    -webkit-mask-size: 200%;
+    animation: shine 6s linear infinite;
+}
+
+@keyframes shine {
+    from { -webkit-mask-position: 150%; }
+    to { -webkit-mask-position: -50%; }
+}
+
+body {
+    height: 80vh;
+    color: #fcba03;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.navbar {
+    background-color: #ffce47;
+    color: #feffa8;
+    font-weight: bold;
+}
+
+.nav-item {
+    margin-right: 2rem;
+}
+
+.sperm {
+    background-color: black;
+}
+
+.wallpaper {
+    padding: 1rem 1rem 1rem 1rem;
+    height: 100%;
+}

@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% set active_page = "wallpaper" %}
+{% block body %}
+
+<p>arrows to navigate, i to toggle invisiblity, e to toggle erasor mode, -/+ to change height, s to take a screenshot</p>
+
+<div class="wallpaper">
+  <iframe src="/static/animations/wallpaper/index.html", name="attractor", title="attractor", scrolling="no", width=100%, height=85%, frameborder="0px"></iframe>
+</div>
+
+{% endblock %}
