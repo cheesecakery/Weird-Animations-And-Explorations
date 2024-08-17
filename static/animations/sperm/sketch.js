@@ -7,6 +7,8 @@ let spirals = [];
 const NO_OF_WAVES = 4;
 let waves = [];
 
+let gameStarted = false;
+
 let sperm_heights;
 
 function setup() {
@@ -86,6 +88,10 @@ function draw() {
 
   // Movement
   if (keyIsPressed) {
+    if (!gameStarted) {
+      gameStarted = true;
+    }
+
     if (!sperm.inEgg) {
       if (keyCode == UP_ARROW) {
         let force = createVector(0, -0.01);
@@ -116,7 +122,9 @@ function draw() {
     } else {
       sperm.wrap();
     }
-    sperm.move();
+    if (gameStarted) {
+      sperm.move();
+    }
     sperm.draw();
   }
 

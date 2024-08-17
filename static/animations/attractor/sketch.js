@@ -47,7 +47,7 @@ function draw() {
 
   // Move attractor
   let ra = 1;
-  let dif = 0.3;
+  let dif = 0.5;
   if (attractor_move) {
     if (keyIsDown(LEFT_ARROW)) {
       attractor_cursor.pos.x -= ra;

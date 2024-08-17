@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% set active_page = "planets" %}
+{% set planets = ['planetsmoving', 'masking1', 'wavy', 'gagnam_style'] %}
+
+{% block head %}
+<style>
+  body {
+    background-color: black;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="planets">
+    {% for planet in planets %}
+        <iframe src ="/static/animations/planets/{{planet}}/index.html", width="100%", height="700px", class="planet", name="{{planet}}", title="{{planet}}", frameborder="0", scrolling="no"></iframe>
+    {% endfor %}
+</div>
+{% endblock %}

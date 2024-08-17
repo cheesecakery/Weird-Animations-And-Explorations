@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% set active_page = "polar" %}
+{% set color = [('#13192e', '#1f3752'), 
+                ('#162917', '#364a33'),
+                ('#380a0a', '#6b2c25'),
+                ('#113536', '#264d4a'),
+                ('#1b0e29','#3f2242'),
+                ('#3b0f22', '#522132'),
+                ('#2b1807', '#402f11')] | random %}
+
+{% set polar_bar = [
+    ('peachy', 'peachy', 'peachy'),
+    ('iris', 'iris', 'iris'),
+    ('slinky', 'slinky', 'slinky'),
+    ('crinkling_spiral', 'crinkling_spiral', 'crinkling spiral'),
+    ('circles', 'circles', 'circles'),
+    ('limacon', 'limacon', 'limaçon'),
+    ('cardioid', 'cardioid', 'cardioid'),
+    ('eye_spiral', 'eye_spiral', 'eye spiral'),
+    ('limacon2', 'limacon2', 'limaçon: the sequel')
+] %}
+
+{% block head %}
+<style>
+  .header {
+    background-color: {{color[0]}};
+  }
+
+  .navbar {
+    background-color: {{color[1]}};
+  }
+
+  body {
+    background-color: black;
+  }
+
+  .mini-navbar {
+    background-color: {{ color[0]}};
+    color: {{color[0]}};
+    opacity: 0.9;
+  }
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+  <iframe src = "/static/animations/polar/{{animation}}/index.html", name="{{animation}}", title="{{animation}}", frameborder="0", scrolling="no"></iframe>
+
+  {% block bottom %}
+    {% for href, id, caption in polar_bar %}
+      {% if id == animation %}
+          <li class="nav-item active">
+              <a class="nav-link" href="/polar/{{ href|e }}">{{caption|e}}<span class="sr-only">(current)</span></a>
+          </li>
+      {% else %}
+          <li class="nav-item">
+              <a class="nav-link" href="/polar/{{ href|e }}">{{caption|e}}</a>
+          </li>
+      {% endif %}
+    {% endfor %}
+  {% endblock %}
+
+{% endblock %}

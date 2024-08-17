@@ -99,19 +99,15 @@ class Attractor {
     // Checks if touching bottom / top
     if (this.pos.y + this.r >= height) {
       this.pos.y = height - this.r;
-      this.vel.y *= -0.5;
     } else if (this.pos.y - this.r <= 0) {
       this.pos.y = this.r;
-      this.vel.y *= -0.5;
     }
 
     // Checks if touching sides
     if (this.pos.x + this.r >= width) {
       this.pos.x = width - this.r;
-      this.vel.x *= -0.5;
     } else if (this.pos.x - this.r <= 0) {
       this.pos.x = this.r;
-      this.vel.x *= -0.5;
     }
   }
 
@@ -132,19 +128,15 @@ class Attractor {
     // Check top and bottom
     if (this.pos.y - this.r <= jelly.y + 2) {
       this.pos.y = jelly.y + this.r + 2;
-      this.vel.y *= -1;
     } else if (this.pos.y + this.r >= jelly.y + jelly.h - 2) {
       this.pos.y = jelly.y + jelly.h - this.r - 2;
-      this.vel.y *= -1;
     }
 
     // Check sides
     if (this.pos.x - this.r <= jelly.x + 2) {
       this.pos.x = jelly.x + this.r + 2;
-      this.vel.x *= -1;
     } else if (this.pos.x + this.r >= jelly.x + jelly.w - 2) {
       this.pos.s = jelly.x + jelly.w - this.r - 2;
-      this.vel.x *= -1;
     }
   }
 
@@ -170,20 +162,16 @@ class Attractor {
     if (this.collidesWith(jelly)) {
       if (this.pos.x < jelly.x) {
         this.pos.x = jelly.x - this.r;
-        this.vel.x *= -1;
         // Right
       } else if (this.pos.x > jelly.x + jelly.w) {
         this.pos.x = jelly.x + jelly.w + this.r;
-        this.vel.x *= -1;
       }
 
       if (this.pos.y < jelly.y) {
         this.pos.y = jelly.y - this.r;
-        this.vel.y *= -1;
         // Bottom
       } else if (this.pos.y > jelly.y + jelly.h) {
         this.pos.y = jelly.y + jelly.h + this.r;
-        this.vel.y *= -1;
       }
     }
   }
@@ -207,9 +195,6 @@ class Attractor {
 
     this.mating = true;
     attractor.mating = true;
-
-    this.vel.set(0, 0);
-    attractor.vel.set(0, 0);
 
     createText("the mating shall begin!!", "black", 5);
 

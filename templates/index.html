@@ -1,7 +1,14 @@
 {% extends "layout.html" %}
 {% set active_page = "index" %}
+
+{% set animation = [
+    'ahhhh', 'cellularautomata', 'dbpendulum', 
+    'fire', 'phosphene', 'rectangular', 'worleynoise'] | random %}
+
 {% block body %}
 
-hello! o?
+<p> hello! i am sonja lundh and these are the animations i have made... </p>
+
+<iframe src = "/static/animations/homepage/cellularautomata/index.html", class="square", name="{{animation}}", title="{{animation}}", frameborder="0", scrolling="no"></iframe>
 
 {% endblock %}
