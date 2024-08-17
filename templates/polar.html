@@ -34,9 +34,11 @@
     background-color: black;
   }
 
+  .mainscreen {
+    padding: 0;
+  }
+
   .mini-navbar {
-    background-color: {{ color[0]}};
-    color: {{color[0]}};
     opacity: 0.9;
   }
 </style>
@@ -44,21 +46,19 @@
 {% endblock %}
 
 {% block body %}
-
   <iframe src = "/static/animations/polar/{{animation}}/index.html", name="{{animation}}", title="{{animation}}", frameborder="0", scrolling="no"></iframe>
+{% endblock %}
 
-  {% block bottom %}
-    {% for href, id, caption in polar_bar %}
-      {% if id == animation %}
-          <li class="nav-item active">
-              <a class="nav-link" href="/polar/{{ href|e }}">{{caption|e}}<span class="sr-only">(current)</span></a>
-          </li>
-      {% else %}
-          <li class="nav-item">
-              <a class="nav-link" href="/polar/{{ href|e }}">{{caption|e}}</a>
-          </li>
-      {% endif %}
-    {% endfor %}
-  {% endblock %}
-
+{% block bottom %}
+  {% for href, id, caption in polar_bar %}
+    {% if id == animation %}
+        <li class="nav-item active">
+            <a class="nav-link" href="/polar/{{ href|e }}">{{caption|e}}<span class="sr-only">(current)</span></a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="/polar/{{ href|e }}">{{caption|e}}</a>
+        </li>
+    {% endif %}
+  {% endfor %}
 {% endblock %}

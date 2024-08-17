@@ -3,7 +3,6 @@
 {% set giftwraps = ['bouncing', 'mutatr', 'gravattr', 'giftwrap1'] %}
 
 {% block body %}
-<p> gift wrapping! </p>
 <div class="giftwrapping">
     {% for gift in giftwraps %}
         <iframe src ="/static/animations/giftwrapping/{{gift}}/index.html", class="giftwrap", width="80%", name="{{gift}}", title="{{gift}}", frameborder="0", scrolling="no"></iframe>

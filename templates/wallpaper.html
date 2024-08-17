@@ -22,6 +22,8 @@
 
 <iframe src="/static/animations/wallpaper/{{mode}}/index.html", class="wp", name="wallpaper", title="wallpaper", frameborder="0", scrolling="no"></iframe>
 
+{% endblock %}
+
 {% block bottom %}
 {% for href in wallpaper_bar %}
                 {% if href == mode %}
@@ -34,6 +36,4 @@
                     </li>
                 {% endif %}
             {% endfor %}
-{% endblock %}
-
 {% endblock %}

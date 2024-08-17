@@ -33,40 +33,37 @@ body {
     font-size: 15px;
 }
 
+.mainscreen {
+    padding: 10px 10px 0px 10px;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    text-align: center;
+}
+
 .navbar {
     background-color: #ffce47;
     color: #feffa8;
     font-weight: bold;
 }
 
+.mini-navbar {
+    position: fixed;
+    bottom: 0;
+    font-weight: normal;
+    padding: 2px; 
+    width: 100%;
+}
+
 .nav-item {
-    margin-right: 2rem;
-}
-
-.sperm {
-    background-color: black;
-}
-
-.wallpaper {
-    padding: 1rem 1rem 1rem 1rem;
-    height: 100%;
-}
-
-.mainscreen {
-    padding: 10px;
-    display: flex;
-    flex-flow: column;
-    height: 100%;
+    margin: 0rem 1rem 0rem 1rem;
 }
 
 .planets {
     padding: 10px;
     display: flex;
     flex-flow: column;
-}
-
-.planet {
-    margin-bottom: 100px;
+    grid-gap: 200px;
 }
 
 .giftwrapping {
@@ -87,28 +84,4 @@ body {
 
 iframe {
     flex: 1 1 auto;
-    /* background-color: #dcdcdc; */
-}
-
-.wp {
-    /* background-color: #f7f7f7; */
-    background-color: white;
-}
-
-.dark {
-    color: #5c5a53;
-}
-
-.centre {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.mini-navbar {
-    position: fixed;
-    bottom: 0;
-    font-weight: normal;
-    padding: 2px; 
-    width: 100%;
 }
