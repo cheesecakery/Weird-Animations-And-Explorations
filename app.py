@@ -18,8 +18,9 @@ def sperm():
     b_c = "black"
     return render_template("sperm.html", b_c=b_c)
 
+@app.route("/wallpaper")
 @app.route("/wallpaper/<mode>")
-def wallpaper(mode):
+def wallpaper(mode='arrows'):
     return render_template("wallpaper.html", mode=mode) 
 
 @app.route("/planets")
@@ -30,19 +31,7 @@ def planets():
 def giftwrapping():
     return render_template("giftwrapping.html")
 
-
+@app.route("/polar")
 @app.route("/polar/<animation>")
-def polar(animation):
+def polar(animation='peachy'):
     return render_template("polar.html", animation=animation)
-
-# @app.route('/webhook', methods=['POST'])
-#     def webhook():
-#         if request.method == 'POST':
-#             repo = git.Repo('./myproject')
-#             origin = repo.remotes.origin
-#             repo.create_head('master', 
-#         origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
-#             origin.pull()
-#             return '', 200
-#         else:
-#             return '', 400

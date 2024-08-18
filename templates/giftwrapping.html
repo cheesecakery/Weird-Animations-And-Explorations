@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% set active_page = "giftwrapping" %}
 {% set giftwraps = [
-    ('bouncing', 'bouncing'),
-    ('mutatr', 'mutually attracted'), 
-    ('gravattr', 'gravitational attraction toward the centre'),
-    ('giftwrap1', 'randomly generated shapes. click each corner to toggle a leg or a head. space to move!')
+    'bouncing',
+    'mutatr', 
+    'gravattr',
+    'giftwrap1'
 ] %}
 
 {% block expl %}
@@ -48,10 +48,9 @@ gift wrapping
 {% endblock %}
 
 {% block body %}
-
 <div class="giftwrapping">
-    {% for folder, caption in giftwraps %}
-        <iframe src ="/static/animations/giftwrapping/{{folder}}/index.html", class="giftwrap-image", name="{{folder}}", title="{{folder}}", frameborder="0", scrolling="no"></iframe>
+    {% for folder in giftwraps %}
+        <iframe src="/static/animations/giftwrapping/{{folder}}/index.html", class="giftwrap-image", name="{{folder}}", title="{{folder}}", frameborder="0", scrolling="no"></iframe>
     {% endfor %}
 </div>
 {% endblock %}

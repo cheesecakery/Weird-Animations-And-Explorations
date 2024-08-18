@@ -5,8 +5,17 @@
     'ahhhh', 'cellularautomata', 'dbpendulum', 
     'fire', 'phosphene', 'rectangular', 'worleynoise'] | random %}
 
+{% block head %}
+    <style>
+        body, html {
+            height: auto;
+            min-height: 100%;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-<iframe src = "/static/animations/homepage/cellularautomata/index.html", class="square", name="{{animation}}", title="{{animation}}", frameborder="0", scrolling="no"></iframe>
+<iframe src = "/static/animations/homepage/cellularautomata/index.html", class="ca", name="{{animation}}", title="{{animation}}", frameborder="0", scrolling="no"></iframe>
 {% endblock %}
 
 {% block desc %}

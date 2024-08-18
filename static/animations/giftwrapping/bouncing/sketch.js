@@ -14,7 +14,7 @@ let shape = [];
 let pendulums = [];
 
 function setup() {
-  createCanvas(windowWidth, windowWidth);
+  createCanvas(windowWidth, windowHeight);
   background(220);
 
   // create all spots

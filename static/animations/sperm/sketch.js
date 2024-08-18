@@ -1,7 +1,7 @@
 let sperm;
 let sperms = [];
 
-const NO_OF_SPIRALS = 8;
+const NO_OF_SPIRALS = 5;
 let spirals = [];
 
 const NO_OF_WAVES = 4;
