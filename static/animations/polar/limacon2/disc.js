@@ -21,7 +21,7 @@ class Disc {
       
       let strt = 0;
 
-      let rotator = new Rotator(pos.x, pos.y, this.l, angle, strt);
+      let rotator = new myRotator(pos.x, pos.y, this.l, angle, strt);
       this.rotators.push(rotator);
     }
   }

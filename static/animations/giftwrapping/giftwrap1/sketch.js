@@ -101,8 +101,6 @@ function jarvis_march() {
 
 function draw() {
   background(220);
-  // translate(0, height);
-  // scale(1, -1);
 
   if (keyIsDown(RIGHT_ARROW)) {
     for (let spot of shape) {

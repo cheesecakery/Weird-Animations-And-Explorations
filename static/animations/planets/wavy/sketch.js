@@ -19,12 +19,12 @@ let max_d;
 
 let images;
 function preload() {
-  nightsky = loadImage("images/night.jpg");
+  nightsky = loadImage("../images/night.jpg");
 
-  blue = loadImage("images/blue_planet.png");
-  grassy = loadImage("images/grassy_planet.png");
-  magnet = loadImage("images/magnet_planet.png");
-  maskImage = loadImage("images/perfect_circle.png");
+  blue = loadImage("../images/blue_planet_no_shade.png");
+  grassy = loadImage("../images/grassy_planet_no_shade.png");
+  magnet = loadImage("../images/magnet_planet_no_shade.png");
+  maskImage = loadImage("../images/shading.png");
 
   images = [magnet, grassy, blue];
 }

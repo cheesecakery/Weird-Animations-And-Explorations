@@ -10,7 +10,7 @@ let w = 5;
 let y = 0;
 
 function setup() {
-  createCanvas(windowHeight, windowHeight * 1.5);
+  createCanvas(windowWidth, windowHeight * 1.5);
   background(255);
   
   let number = floor(width / w);

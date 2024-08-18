@@ -1,48 +1,36 @@
-let sun;
-
 const NO_OF_PLANETS = 17;
 
 let planets = [];
 
 const G = 1;
+const SIZE = 3;
 
-let the_sun;
+let sun;
+let sun_img;
+let night;
 
-let total_images;
-let green_images;
-let blue_images;
-let grey_images;
-let images;
+let total_imgs = [];
+let imgs;
 
-let perfect_circle;
+let shading;
 
-let nightsky;
+let img_names = ['blue_planet', 'grassy',
+  'earth_planet', 'meteor', 'black_planet', 'crystal_planet',
+  'desert_planet', 'green_planet', 'magnet_planet', 'moon_planet', 
+  'purple_planet', 'red_planet', 'turq_planet', 'wood_planet'
+]
 
 function preload() {
-  nightsky = loadImage("images/night.jpg");
+  night = loadImage("../images/night.jpg");
+  sun_img = loadImage("../images/the_sun.png");
+  shading = loadImage("../images/shading.png");
 
-  the_sun = loadImage("images/the_sun.png");
-  let blue = loadImage("images/blue_planet.png");
-  let grassy = loadImage("images/grassy.png");
-  let opal = loadImage("images/opal.png");
-  let earth = loadImage("images/earth_planet.png");
-  let meteor = loadImage("images/meteor.png");
-  let black = loadImage("images/black_planet.png");
-  let crystal = loadImage("images/crystal_planet.png");
-  let desert = loadImage("images/desert_planet.png");
-  let green = loadImage("images/green_planet.png");
-  let magnet = loadImage("images/magnet_planet.png");
-  let moon = loadImage("images/moon_planet.png");
-  let purple = loadImage("images/purple_planet.png");
-  let red = loadImage("images/red_planet.png");
-  let turq = loadImage('images/turq_planet.png');
-  let wood = loadImage('images/wood_planet.png');
-  
-  perfect_circle = loadImage('images/perfect_circle.png');
+  for (let img_name of img_names) {
+    let img = loadImage("../images/" + img_name + ".png");
+    total_imgs.push(img);
+  }
 
-  total_images = [blue, grassy, meteor, opal, earth, black, crystal, desert, green, magnet, moon, purple, red, turq, wood];
-  
-  images = randomSubArray(total_images, NO_OF_PLANETS);
+  imgs = randomSubArray(total_imgs, NO_OF_PLANETS);
 }
 
 function setup() {
@@ -52,15 +40,15 @@ function setup() {
   strokeWeight(2);
 
   image(
-    nightsky,
+    night,
     0,
     0,
     width,
     height,
     0,
     0,
-    nightsky.width,
-    nightsky.height,
+    night.width,
+    night.height,
     COVER
   );
 
@@ -75,12 +63,12 @@ function setup() {
   for (let i = 0; i < NO_OF_PLANETS; i++) {
     // let m = mlt * random(100, 150) * (i + 1);
     let m = 40;
-    let img = images[i % images.length];
+    let img = imgs[i % imgs.length];
 
     let pos = p5.Vector.rotate(pos1, step * i);
     pos.mult(400);
 
-    let planet = new Planet(pos.x, pos.y, m, img);
+    let planet = new Planet(pos.x, pos.y, m, img, 0, 10);
     planets.push(planet);
     
     let r = random([true, false]);
@@ -90,15 +78,15 @@ function setup() {
 
 function draw() {
   image(
-    nightsky,
+    night,
     0,
     0,
     width,
     height,
     0,
     0,
-    nightsky.width,
-    nightsky.height,
+    night.width,
+    night.height,
     COVER
   );
   
@@ -117,7 +105,7 @@ function draw() {
   imageMode(CENTER);
   translate(width / 2, height / 2);
   
-  // Some planets are drawn below, some are drawn above
+  // DISPLAY OF PLANETS
   for (let planet of planets_below) {
     planet.display();
   }
@@ -128,22 +116,21 @@ function draw() {
     planet.display();
   }
 
+  // MOVEMENT OF PLANETS
+  for (let planet of planets_below) {
+    sun.attract(planet);
+    sun.touches(planet);
 
-  if (focused) {
-    for (let planet of planets_below) {
-      sun.attract(planet);
-      sun.touches(planet);
-  
-      planet.move();
-    }
-
-    for (let planet of planets_above) {
-      sun.attract(planet);
-      sun.touches(planet);
-  
-      planet.move();
-    }
+    planet.move();
   }
+
+  for (let planet of planets_above) {
+    sun.attract(planet);
+    sun.touches(planet);
+
+    planet.move();
+  }
+
   pop();
 }
 

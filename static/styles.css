@@ -33,17 +33,8 @@ body {
     font-size: 15px;
 }
 
-.mainscreen {
-    padding: 10px 10px 0px 10px;
-    display: flex;
-    flex-flow: column;
-    height: 100%;
-    text-align: center;
-}
-
 .navbar {
     background-color: #ffce47;
-    color: #feffa8;
     font-weight: bold;
 }
 
@@ -53,6 +44,30 @@ body {
     font-weight: normal;
     padding: 2px; 
     width: 100%;
+}
+
+.mainscreen {
+    padding: 10px 10px 0px 10px;
+    display: flex;
+    flex-flow: column;
+    height: 90%;
+
+    text-align: center;
+}
+
+.expl {
+    width: 100%;
+    background-color: #ffe373;
+    color: white;
+    text-align: center;
+}
+
+.homepage {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #fcba03;
+    color: white;
+    height: 100%;
 }
 
 .nav-item {
@@ -79,7 +94,17 @@ body {
 }
 
 .giftwrap {
+    position: relative;
+}
+
+.giftwrap-image {
+    width: 90%;
     aspect-ratio: 1 / 1;
+}
+
+.caption {
+    position: absolute;
+    bottom: 0;
 }
 
 iframe {

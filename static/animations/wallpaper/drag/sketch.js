@@ -75,7 +75,6 @@ function drawPicture() {
   }
 
   updatePixels();
-  // save("texture.png");
 }
 
 function draw() {
@@ -109,22 +108,4 @@ function draw() {
   image(buffer, 0, 0, width, height);
 
   start += step;
-}
-
-// function mouseDragged() {
-//   buffer.erase();
-//   buffer.strokeWeight(r);
-//   buffer.line(event.offsetX, event.offsetY, mouseX, mouseY);
-// }
-
-function keyPressed() {
-  if (keyCode == 189) {
-    r = constrain(r - 1, 5, 40);
-  } else if (keyCode == 187) {
-    r = constrain(r + 1, 5, 40);
-  }
-  
-  if (keyCode == 83) {
-    save("texture.png");
-  }
 }

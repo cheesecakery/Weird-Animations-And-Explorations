@@ -10,14 +10,11 @@ let m;
 
 let max_d;
 
-let texture;
-
 function preload() {
-  blue_planet = loadImage("blue_planet.png");
-  perfect_circle = loadImage("perfect_circle.png");
+  blue_planet = loadImage("../images/blue_planet_no_shade.png");
+  perfect_circle = loadImage("../images/shading.png");
 
-  night = loadImage("night.jpg");
-  texture = loadImage("texture.png");
+  night = loadImage("../images/night.jpg");
 }
 
 function setup() {

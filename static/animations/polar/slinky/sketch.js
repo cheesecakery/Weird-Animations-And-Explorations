@@ -13,7 +13,7 @@ function setup() {
     
     let pace = random(2, 5);
     
-    let flower = new Flower(x, y, v, r, pace);
+    let flower = new Slink(x, y, v, r, pace);
     flowers.push(flower);
   }
 }

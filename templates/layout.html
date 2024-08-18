@@ -57,9 +57,21 @@
             </div>
         </nav>
 
+        {% if active_page in ['attractor', 'sperm', 'wallpaper', 'giftwrapping'] %}
+            <div class="expl">
+            {% block expl %}{% endblock %}
+            </div>
+        {% endif %}
+
         <div class="mainscreen">
         {% block body %}{% endblock %}
         </div>
+
+        {% if active_page == 'index' %}
+        <div class="homepage">
+            {% block desc %}{% endblock %}
+        </div>
+        {% endif %}
 
         {% if active_page == 'wallpaper' or active_page == 'polar' %}
             <nav class="navbar navbar-expand-lg navbar-dark mini-navbar">

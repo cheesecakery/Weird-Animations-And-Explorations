@@ -3,17 +3,27 @@
 
 {% block head %}
 <style>
+  .expl {
+    background-color: #312f4a;
+    color: #4c607d;
+    font-weight: bold;
+  }
+
   body {
     background-color: black;
-    color: #3d5999;
-    font-weight: lighter;
+  }
+
+  .mainscreen {
+    padding: 0px;
   }
 </style>
 {% endblock %}
 
-{% block body %}
+{% block expl %}
+<p class="dark">move up and down with arrows. eat food to go quicker. aim is to get all three sperms on the egg so it will crack.</p>
+{% endblock %}
 
-<p class="dark">move up and down with arrows. eat food to go quicker. aim is to get all five sperms on the egg so it will crack.</p>
+{% block body %}
 
 <iframe src = "/static/animations/sperm/index.html", class="sperm", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
 

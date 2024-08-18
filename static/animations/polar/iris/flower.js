@@ -20,11 +20,15 @@ class Flower {
     translate(this.pos.x, this.pos.y);
     
     let step = (2 * PI) / this.v;
-
-    // fill(37, 42, 48);
     noFill();
 
     rotate(this.pace * cos(this.start));
+    this.shape(step);
+    this.start += this.inc;
+    pop();
+  }
+
+  shape(step) {
     beginShape();
     for (let i = 0; i < this.v + 1; i++) {
       let angle = i * step;
@@ -37,8 +41,5 @@ class Flower {
       vertex(pos.x, pos.y);
     }
     endShape();
-
-    this.start += this.inc;
-    pop();
   }
 }

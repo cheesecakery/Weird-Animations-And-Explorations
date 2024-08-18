@@ -136,7 +136,7 @@ function draw() {
 
       spirals = [];
 
-      if (sperms.length == 5) {
+      if (sperms.length == 3) {
         egg.cracked = true;
 
         setTimeout(() => {

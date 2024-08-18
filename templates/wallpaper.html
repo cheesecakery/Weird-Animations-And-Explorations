@@ -14,13 +14,18 @@
 </style>
 {% endblock %}
 
-{% block body %}
-
+{% block expl %}
 {% if mode == 'arrows' %}
     <p>arrows to navigate, i to toggle invisiblity, e to toggle erasor mode, -/+ to change height, c to clear canvas, s to take a screenshot</p>
-{% endif %}
+{% elif mode == 'drag' %}
+    <p>drag to draw on the canvas !</p>
+{% else %}
+    <p>arrows to navigate, -/+ to zoom in n out</p>
+{% endif %}{% endblock %}
 
-<iframe src="/static/animations/wallpaper/{{mode}}/index.html", class="wp", name="wallpaper", title="wallpaper", frameborder="0", scrolling="no"></iframe>
+{% block body %}
+
+<iframe src="/static/animations/wallpaper/{{mode}}/index.html", name="wallpaper", title="wallpaper", frameborder="0", scrolling="no"></iframe>
 
 {% endblock %}
 

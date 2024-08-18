@@ -1,11 +1,20 @@
 {% extends "layout.html" %}
 {% set active_page = "giftwrapping" %}
-{% set giftwraps = ['bouncing', 'mutatr', 'gravattr', 'giftwrap1'] %}
+{% set giftwraps = [
+    ('bouncing', 'bouncing'),
+    ('mutatr', 'mutually attracted'), 
+    ('gravattr', 'gravitational attraction toward the centre'),
+    ('giftwrap1', 'randomly generated shapes. click each corner to toggle a leg or a head. space to move!')
+] %}
+
+{% block expl %}
+<p>for these animations, i let the particles move about in various ways and used the 'jarvis march' algorithm to create a container around them !</p>
+{% endblock %}
 
 {% block body %}
 <div class="giftwrapping">
-    {% for gift in giftwraps %}
-        <iframe src ="/static/animations/giftwrapping/{{gift}}/index.html", class="giftwrap", width="80%", name="{{gift}}", title="{{gift}}", frameborder="0", scrolling="no"></iframe>
+    {% for folder, caption in giftwraps %}
+        <iframe src ="/static/animations/giftwrapping/{{folder}}/index.html", class="giftwrap-image", name="{{folder}}", title="{{folder}}", frameborder="0", scrolling="no"></iframe>
     {% endfor %}
 </div>
 {% endblock %}

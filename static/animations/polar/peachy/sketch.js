@@ -16,7 +16,7 @@ function setup() {
     let pace = 15;
     let strt = step * i;
     
-    let flower = new Flower(x, y, v, r, pace, strt);
+    let flower = new Peach(x, y, v, r, pace, strt);
     flowers.push(flower);
   }
 }

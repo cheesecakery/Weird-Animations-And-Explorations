@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 {% set active_page = "attractor" %}
-{% block body %}
 
-<p>click on the eye of the attractor (the black dot) to focus on this attractor. then use arrows to move attractor about. when you get two attractors in the pit, they mate.</p>
+{% block expl %}
+    <p>click on the eye of the attractor (the black dot) to focus on this attractor. then use arrows to move attractor about. when you get two attractors in the pit, they mate.</p>
+{% endblock %}
+
+{% block body %}
 
 <iframe src = "/static/animations/attractor/index.html", name="attractor", title="attractor", frameborder="0", scrolling="no"></iframe>
 

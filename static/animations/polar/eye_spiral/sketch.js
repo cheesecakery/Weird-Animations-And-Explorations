@@ -21,7 +21,7 @@ function setup() {
 
     let strt = i * 0.001;
 
-    let rotator = new Rotator(pos.x, pos.y, l, angle, strt);
+    let rotator = new myRotator(pos.x, pos.y, l, angle, strt);
     rotators.push(rotator);
   }
 }
