@@ -8,10 +8,47 @@
 ] %}
 
 {% block expl %}
-<p>for these animations, i let the particles move about in various ways and used the 'jarvis march' algorithm to create a container around them !</p>
+<p>click to toggle visible particles ! for the fourth, play around with clicking the joints & using L/R arrows !</p>
+{% endblock %}
+
+{% block offcanvasheader %}
+gift wrapping
+{% endblock %}
+
+{% block offcanvastext %}
+    <p>hiya ! so these animations came about as i was looking at various algorithms. this particular one is a 'gift-wrapping' one, which
+        finds the smallest convex shape of a section of points. in particular, i used the 'jarvis marching' algorithm (linked down below!)
+    </p>
+    <p> i thought it would be cool to make these into animations by seeing how the shapes would transform in response to different
+        movements of particles. 
+    </p>
+    <p> the first animation places the particles at the top of the canvas, and lets them fall. so, a basic physics simulation ! 
+        the second one uses mutual attraction (so all the particles want to get closer to one another),
+        and the third one follows from the second, but also makes each particle attracted to a central point. so this way the particles never 
+        want to leave the canvas.
+    </p>
+    <p>
+        for the fourth, i decided to forgo the movement, looking instead at the random shapes formed, always convex. 
+        i thought they looked like torsos, and wanted to expand this idea with legs and heads. the animation works like so - if you tap
+        the dots once, they will transform into legs. if you tap again, it will become a head. then you can create weirdly shaped mammals ! 
+        and you can make the mammal rock slowly back and forth with the left and right arrows.
+    </p>
+    <p>
+        to make the legs, i used the double pendulum formula linked down below, and added little feet pointing outwards. 
+        i thought it was interesting how lifelike a double pendulum seems, with its subtle chaos.
+    </p>
+    <p>
+        some resources i used:
+        <ul>
+            <li><a class="custom-link" target="_blank" href="https://www.algorithm-archive.org/contents/gift_wrapping/gift_wrapping.html">gift wrapping algorithm</a></li>
+            <li><a class="custom-link" target="_blank" href="https://www.myphysicslab.com/pendulum/double-pendulum-en.html">double pendulum</a></li>
+            <li><a class="custom-link" target="_blank" href="https://www.natureofcode.com">nature of code</a></li>
+        </ul>
+    </p>
 {% endblock %}
 
 {% block body %}
+
 <div class="giftwrapping">
     {% for folder, caption in giftwraps %}
         <iframe src ="/static/animations/giftwrapping/{{folder}}/index.html", class="giftwrap-image", name="{{folder}}", title="{{folder}}", frameborder="0", scrolling="no"></iframe>

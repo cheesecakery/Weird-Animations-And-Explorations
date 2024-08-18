@@ -36,6 +36,7 @@ body {
 .navbar {
     background-color: #ffce47;
     font-weight: bold;
+    padding-right: 5px;
 }
 
 .mini-navbar {
@@ -57,9 +58,10 @@ body {
 
 .expl {
     width: 100%;
-    background-color: #ffe373;
+    background-color: #ffde59;
     color: white;
     text-align: center;
+    font-weight: normal;
 }
 
 .homepage {
@@ -109,4 +111,26 @@ body {
 
 iframe {
     flex: 1 1 auto;
+}
+
+.offcanvas {
+    width: max(25vw, 300px);
+    text-align: left;
+}
+
+.offcanvas-header {
+    background-color: #fcba03;
+    color: white;
+    font-weight: bold;
+  }
+
+.offcanvas-body {
+    background-color: #ffce47;
+    color: #fff1ba;
+    font-weight: normal;
+}
+
+.custom-link, .custom-link:hover {
+    color: white;
+    text-decoration: none;
 }

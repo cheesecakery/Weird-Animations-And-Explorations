@@ -14,6 +14,18 @@
 </style>
 {% endblock %}
 
+{% block offcanvasheader %} wallpaper drawings {% endblock %}
+{% block offcanvastext %}
+    <p>hiya !</p>
+    <p> things to say: found algorithm in a book (find / remember book, omni smth) , beautiful generated style, again wanted to see
+        this style in movement, etc . ways could play around further is with colour % etc ! 
+        
+        had fun testing out dragging / movement style 
+
+        experiments with different layers of the canvas
+    </p>
+{% endblock %}
+
 {% block expl %}
 {% if mode == 'arrows' %}
     <p>arrows to navigate, i to toggle invisiblity, e to toggle erasor mode, -/+ to change height, c to clear canvas, s to take a screenshot</p>
@@ -32,8 +44,8 @@
 {% block bottom %}
 {% for href in wallpaper_bar %}
                 {% if href == mode %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/wallpaper/{{ href|e }}">{{href|e}}<span class="sr-only">(current)</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/wallpaper/{{ href|e }}">{{href|e}}<span class="visually-hidden">(current)</span></a>
                     </li>
                 {% else %}
                     <li class="nav-item">

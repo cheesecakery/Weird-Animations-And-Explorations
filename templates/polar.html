@@ -41,8 +41,34 @@
   .mini-navbar {
     opacity: 0.9;
   }
+
+  .offcanvas-header {
+    background-color: {{color[0]}};
+    color: white;
+    font-weight: bold;
+  }
+
+.offcanvas-body {
+    background-color: {{color[1]}};
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: normal;
+}
 </style>
 
+{% endblock %}
+
+{% block offcanvasheader %} polar coordinates {% endblock %}
+{% block offcanvastext %}
+    <p>hiya !</p>
+    <p>
+      so, the ideas of these first stemmed with when i learnt about polar coordinates in a-level further maths. i wasn't doing 
+      animations then, but i was playing around a lot in desmos, as i realised that the splitting of coordinates into (r, theta) form  
+      instead meant i could make a great deal of more interesting curvatures.
+    </p>
+    <p>
+      so i used copious amounts of sines and cosines in these animations - both in the way the particles spawn on the canvas, and in the way and the speed 
+      at which they move.
+    </p>
 {% endblock %}
 
 {% block body %}
@@ -52,8 +78,8 @@
 {% block bottom %}
   {% for href, id, caption in polar_bar %}
     {% if id == animation %}
-        <li class="nav-item active">
-            <a class="nav-link" href="/polar/{{ href|e }}">{{caption|e}}<span class="sr-only">(current)</span></a>
+        <li class="nav-item">
+            <a class="nav-link active" href="/polar/{{ href|e }}">{{caption|e}}<span class="visually-hidden">(current)</span></a>
         </li>
     {% else %}
         <li class="nav-item">
