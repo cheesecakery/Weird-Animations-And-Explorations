@@ -22,11 +22,11 @@
 
 {% block head %}
 <style>
-  .header {
+  .header, .offcanvas-header, .offcanvas-body {
     background-color: {{color[0]}};
   }
 
-  .navbar {
+  .navbar, .offcanvas-info {
     background-color: {{color[1]}};
   }
 
@@ -34,41 +34,31 @@
     background-color: black;
   }
 
-  .mainscreen {
-    padding: 0;
-  }
-
   .mini-navbar {
     opacity: 0.9;
   }
 
-  .offcanvas-header {
-    background-color: {{color[0]}};
-    color: white;
-    font-weight: bold;
-  }
-
-.offcanvas-body {
-    background-color: {{color[1]}};
+  .offcanvas-header, .offcanvas-body, .offcanvas-info {
     color: rgba(255, 255, 255, 0.5);
-    font-weight: normal;
-}
+  }
 </style>
 
 {% endblock %}
 
 {% block offcanvasheader %} polar coordinates {% endblock %}
 {% block offcanvastext %}
-    <p>hiya !</p>
-    <p>
-      so, the ideas of these first stemmed with when i learnt about polar coordinates in a-level further maths. i wasn't doing 
-      animations then, but i was playing around a lot in desmos, as i realised that the splitting of coordinates into (r, theta) form  
-      instead meant i could make a great deal of more interesting curvatures.
-    </p>
-    <p>
-      so i used copious amounts of sines and cosines in these animations - both in the way the particles spawn on the canvas, and in the way and the speed 
-      at which they move.
-    </p>
+    <div class="offcanvas-info">
+      <h4 class="offcanvas-mini-title">some stuff i wanna say</h4>
+      <p>
+        so, the ideas of these first stemmed with when i learnt about polar coordinates in a-level further maths. i wasn't doing 
+        animations then, but i was playing around a lot in desmos, as i realised that the splitting of coordinates into (r, theta) form  
+        instead meant i could make some quite interesting curvatures
+      </p>
+      <p>
+        so, in these animations,, i used copious amounts of sines and cosines - both in the way the particles spawn on the canvas, and in the way and the speed 
+        at which they move.
+      </p>
+    </div>
 {% endblock %}
 
 {% block body %}

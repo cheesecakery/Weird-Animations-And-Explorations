@@ -7,39 +7,51 @@
   body {
     background-color: black;
   }
-
-  .mainscreen {
-    padding: 0px;
-  }
 </style>
 {% endblock %}
 
 {% block offcanvasheader %} planetary exploration {% endblock %}
 {% block offcanvastext %}
-    <p>hiya !</p>
-    <p>
-        things 2 mention: the textures came from an a level art project to do with (i dont remember, not rly that important),
-        used photoshop, lots of fun 
-    </p>
-    <p>
-      wanted to play around with making elementary shaders - used this shader (show picture of the shader ? )
-      (show picture of base shading.png )
-    </p>
-    <p>
-      the first one - wanted to seem like planets were going above and below . multiple experiments, first had planets bouncing off 
-      which looked sort of uncanny. then decided to make it 'look' like the planets were going above and below . then added shading . 
-      had a lot of trouble with the weird switch when the planet moved past the sun - never figured out how to fix this . it is a weird 
-      2d thing, but i like it a lot
-    </p>
-    <p>
-      the second and third consist of explorations with masking in p5 
-      the third i grabbed a bunch of waves to make a somewhat random line for the planets to bob up and down in . 
-    </p>
-    <p>
-      the last one i refer to as 'gangnam style' as when i play the song whilst watching the animation, it does kinda seem like they
-      are moving in beat. this was an accident caused by centering the canvas at the wrong point causing everything to move erratically but 
-      i enjoy the chaos of it . i placed all the planet textures on this one because why not !
-    </p>
+    <div class="offcanvas-info">
+      <h4 class="offcanvas-mini-title">hiya !</h4>
+      <p>
+          things 2 mention: the textures came from an a level art project to do with (i dont remember, not rly that important),
+          used photoshop, lots of fun 
+      </p>
+      <p>
+        wanted to play around with making elementary shaders - used this shader (show picture of the shader ? )
+        (show picture of base shading.png )
+      </p>
+    </div>
+    <div class="offcanvas-info">
+      <h4 class="offcanvas-mini-title">planets in orbit</h4>
+      <p>
+        the first one - wanted to seem like planets were going above and below . multiple experiments, first had planets bouncing off 
+        which looked sort of uncanny. then decided to make it 'look' like the planets were going above and below . then added shading . 
+        had a lot of trouble with the weird switch when the planet moved past the sun - never figured out how to fix this . it is a weird 
+        2d thing, but i like it a lot
+      </p>
+    </div>
+    <div class="offcanvas-info">
+      <h4 class="offcanvas-mini-title">experiments with masking</h4>
+      <p>
+        the second and third consist of explorations with masking in p5 
+        </p>
+    </div>
+    <div class="offcanvas-info">
+      <h4 class="offcanvas-mini-title">wavy, masked planets</h4>
+      <p>
+        the third i grabbed a bunch of waves to make a somewhat random line for the planets to bob up and down in . 
+      </p>
+    </div>
+    <div class="offcanvas-info">
+      <h4 class="offcanvas-mini-title">gangam style</h4>
+      <p>
+        the last one i refer to as 'gangnam style' as when i play the song whilst watching the animation, it does kinda seem like they
+        are moving in beat. this was an accident caused by centering the canvas at the wrong point causing everything to move erratically but 
+        i enjoy the chaos of it . i placed all the planet textures on this one because why not !
+      </p>
+    </div>
 {% endblock %}
 
 {% block body %}

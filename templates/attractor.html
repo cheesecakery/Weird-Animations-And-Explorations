@@ -1,17 +1,21 @@
 {% extends "layout.html" %}
 {% set active_page = "attractor" %}
 
-{% block expl %}
-    <p>click on the eye of the attractor (the black dot) to focus on this attractor. then use arrows to move attractor about. when you get two attractors in the pit, they mate.</p>
-{% endblock %}
-
-{% block offcanvasheader %} the attractor game {% endblock %}
+{% block offcanvasheader %}the attractor game{% endblock %}
 {% block offcanvastext %}
-    <p>hiya !</p>
+    <div class="offcanvas-info">
+        <h4 class="offcanvas-mini-title">how to play
+        </h4>
+        <ul>
+            <li>click on the eye of an attractor (the black dot) to start movement</li>
+            <li>use arrows to navigate</li>
+            <li>when two attractors get in the slime pit, they mate</li>
+        </ul>
+    </div>
 {% endblock %}
 
 {% block body %}
 
-<iframe src = "/static/animations/attractor/index.html", name="attractor", title="attractor", frameborder="0", scrolling="no"></iframe>
+<iframe src = "/static/animations/attractor/index.html", id="attractor", name="attractor", title="attractor", frameborder="0", scrolling="no"></iframe>
 
 {% endblock %}

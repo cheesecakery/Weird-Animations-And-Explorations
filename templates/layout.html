@@ -36,11 +36,11 @@
             </div>
 
             <nav class="navbar navbar-expand-lg navbar-dark">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTop" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse navbar-toggleable-xs" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse navbar-toggleable-xs" id="navbarTop">
                     <ul class="navbar-nav mr-auto">
                         {% for href, id, caption in navigation_bar %}
                             {% if id == active_page %}
@@ -57,31 +57,19 @@
                 </div>
 
                 {% if active_page != 'index' %}
-                    <button class="btn {% if active_page == 'polar' %} btn-dark {% else %} btn-warning {% endif %} ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target={{"#offcanvas-" + active_page}} aria-controls="offcanvas-giftwrapping">?</button>
+                    <button class="btn {% if active_page in ['sperm', 'polar'] %} btn-dark {% else %} btn-warning {% endif %} ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target={{"#offcanvas-" + active_page}} aria-controls="offcanvas-giftwrapping">?</button>
                 {% endif %}
             </nav>
-        
-            {% if active_page in ['attractor', 'sperm', 'wallpaper', 'giftwrapping'] %}
-                <div class="expl">
-                {% block expl %}{% endblock %}
-                </div>
-            {% endif %}
 
             {% block body %}{% endblock %}
 
-            {% if active_page == 'index' %}
-            <div class="homepage">
-                {% block desc %}{% endblock %}
-            </div>
-            {% endif %}
-
             {% if active_page in ['wallpaper', 'polar'] %}
                 <nav class="navbar navbar-expand-lg navbar-dark mini-navbar">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarBottom" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                         </button>
                         
-                        <div class="collapse navbar-collapse navbar-toggleable-xs" id="navbarSupportedContent">
+                        <div class="collapse navbar-collapse navbar-toggleable-xs" id="navbarBottom">
                             <ul class="navbar-nav mx-auto">
                                 {% block bottom %}
                                 {% endblock %}
@@ -93,7 +81,7 @@
 
         <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id={{"offcanvas-" + active_page}} aria-labelledby="offcanvasGiftwrappingLabel">
             <div class="offcanvas-header">
-              <h5 id="offcanvasRightLabel">{% block offcanvasheader %}{% endblock %}</h5>
+              <h3 id="offcanvasRightLabel">{% block offcanvasheader %}{% endblock %}</h3>
               <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">

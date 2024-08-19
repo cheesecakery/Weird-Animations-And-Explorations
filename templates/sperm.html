@@ -1,43 +1,73 @@
 {% extends "layout.html" %}
 {% set active_page = "sperm" %}
 
+{% set color = ('#0b0e14', '#14171f') %}
+
 {% block head %}
 <style>
   body {
-    background-color: black;
+    background-color: {{color[0]}};
   }
 
   .mainscreen {
     padding: 0px;
   }
-</style>
-{% endblock %}
 
-{% block expl %}
-<p class="dark">move up and down with arrows. eat food to go quicker. aim is to get all three sperms on the egg so it will crack.</p>
+  .header {
+    background-color: {{color[0]}};
+  }
+
+  .navbar {
+    background-color: {{color[1]}};
+  }
+
+  .offcanvas-body {
+    background-color: {{color[0]}};
+  }
+
+  .offcanvas-header {
+    background-color: {{color[0]}};
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .offcanvas-info {
+    background-color: {{color[1]}};
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+</style>
 {% endblock %}
 
 {% block offcanvasheader %} the sperm game {% endblock %}
 {% block offcanvastext %}
-    <p>hiya !</p>
-    <p> this game is, admittedly, kind of annoying to play . i was trying more so to play around with textures than anything else </p>
-    <p> it came about after first trying out sine wave explorations in p5 . trigonometry is present literally everywhere 
-      in games, it's crazy.
-    </p>
-    <p>
-      the little food texture is a smaller version of the 'iris' animation on the polar page. (how fun!)
-    </p>
-    <p>
-      i decided to make a sperm game after accidentally designing a lovely sperm . i made the background slightly transparent to give the 
-      sperm the appearance of a tail
-    </p>
-    <p>
-      each sperm that latches onto the egg makes it crack a little more .
-    </p>
+    <div class="offcanvas-info">
+        <h4 title="offcanvas-mini-title">how to play</h4>
+        <p>
+            move up and down with arrows. eat food to go quicker. aim is to get all three sperms on the egg so it will crack.
+        </p>
+    </div>
+
+    <div class="offcanvas-info">
+      <h4 title="offcanvas-mini-title">some stuff i wanted to say</h4>
+      <p> this game is, admittedly, kind of annoying to play . i was trying more so to play around with textures than anything else </p>
+      <p> it came about after first trying out sine wave explorations in p5 . trigonometry is present literally everywhere 
+        in games, it's crazy.
+      </p>
+      <p>
+        the little food texture is a smaller version of the 'iris' animation on the polar page. (how fun!)
+      </p>
+      <p>
+        i decided to make a sperm game after accidentally designing a lovely sperm . i made the background slightly transparent to give the 
+        sperm the appearance of a tail
+      </p>
+      <p>
+        each sperm that latches onto the egg makes it crack a little more .
+      </p>
+    </div>
 {% endblock %}
 
 {% block body %}
 
-<iframe src = "/static/animations/sperm/index.html", class="sperm", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
+<iframe src = "/static/animations/sperm/index.html", id="sperm", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
 
 {% endblock %}

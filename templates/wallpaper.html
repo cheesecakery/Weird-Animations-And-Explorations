@@ -4,24 +4,38 @@
 
 {% block offcanvasheader %} wallpaper drawings {% endblock %}
 {% block offcanvastext %}
-    <p>hiya !</p>
+    <div class="offcanvas-info">
+        <h4 title="offcanvas-mini-title">how to play ({{mode}})</h4>
+        {% if mode == 'arrows' %}
+            <ul>
+                <li>arrows to navigate</li>
+                <li>i to toggle invisiblity</li>
+                <li>e to toggle erasor mode</li>
+                <li>-/+ to change size of brush</li>
+                <li>c to clear the canvas</li>
+                <li>s to take a screenshot</li>
+                        {% elif mode == 'drag' %}
+            <p>drag to draw on the canvas !</p>
+        {% else %}
+            <ul>
+                <li>arrows to move around</li>
+                <li>-/+ to zoom in and out</li>
+            </ul>
+        {% endif %}
+    </div>
+
+    <div class="offcanvas-info">
+    <h4 title="offcanvas-mini-title">some stuff i wanted to say</h4>
     <p> things to say: found algorithm in a book (find / remember book, omni smth) , beautiful generated style, again wanted to see
         this style in movement, etc . ways could play around further is with colour % etc ! 
-        
+    </p><p>
         had fun testing out dragging / movement style 
-
+    </p>
         experiments with different layers of the canvas
     </p>
-{% endblock %}
+    </div>
 
-{% block expl %}
-{% if mode == 'arrows' %}
-    <p>arrows to navigate, i to toggle invisiblity, e to toggle erasor mode, -/+ to change height, c to clear canvas, s to take a screenshot</p>
-{% elif mode == 'drag' %}
-    <p>drag to draw on the canvas !</p>
-{% else %}
-    <p>arrows to navigate, -/+ to zoom in n out</p>
-{% endif %}{% endblock %}
+{% endblock %}
 
 {% block body %}
 

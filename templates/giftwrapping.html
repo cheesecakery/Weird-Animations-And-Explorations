@@ -7,44 +7,43 @@
     'giftwrap1'
 ] %}
 
-{% block expl %}
-<p>click to toggle visible particles ! for the fourth, play around with clicking the joints & using L/R arrows !</p>
-{% endblock %}
-
-{% block offcanvasheader %}
-gift wrapping
-{% endblock %}
-
+{% block offcanvasheader %} gift wrapping {% endblock %}
 {% block offcanvastext %}
-    <p>hiya ! so these animations came about as i was looking at various algorithms. this particular one is a 'gift-wrapping' one, which
-        finds the smallest convex shape of a section of points. in particular, i used the 'jarvis marching' algorithm (linked down below!)
-    </p>
-    <p> i thought it would be cool to make these into animations by seeing how the shapes would transform in response to different
-        movements of particles. 
-    </p>
-    <p> the first animation places the particles at the top of the canvas, and lets them fall. so, a basic physics simulation ! 
-        the second one uses mutual attraction (so all the particles want to get closer to one another),
-        and the third one follows from the second, but also makes each particle attracted to a central point. so this way the particles never 
-        want to leave the canvas.
-    </p>
-    <p>
-        for the fourth, i decided to forgo the movement, looking instead at the random shapes formed, always convex. 
-        i thought they looked like torsos, and wanted to expand this idea with legs and heads. the animation works like so - if you tap
-        the dots once, they will transform into legs. if you tap again, it will become a head. then you can create weirdly shaped mammals ! 
-        and you can make the mammal rock slowly back and forth with the left and right arrows.
-    </p>
-    <p>
-        to make the legs, i used the double pendulum formula linked down below, and added little feet pointing outwards. 
-        i thought it was interesting how lifelike a double pendulum seems, with its subtle chaos.
-    </p>
-    <p>
-        some resources i used:
-        <ul>
+    <div class="offcanvas-info">
+        <h4 class="offcanvas-mini-title">some stuff i wanna say</h4>
+        <p>so these animations came about as i was looking at various algorithms. this particular one is a 'gift-wrapping' one, which
+            finds the smallest convex shape of a section of points. in particular, i used the 'jarvis marching' algorithm (linked down below!)
+        </p>
+        <p> i thought it would be cool to make these into animations by seeing how the shapes would transform in response to different
+            movements of particles. 
+        </p>
+    </div>
+    <div class="offcanvas-info">
+        <h4 class="offcanvas-mini-title">bouncing, mutual and gravitational attraction</h4>
+        <p> the first animation places the particles at the top of the canvas, and lets them fall. so, a basic physics simulation ! 
+            the second one uses mutual attraction (so all the particles want to get closer to one another),
+            and the third one follows from the second, but also makes each particle attracted to a central point. so this way the particles never 
+            want to leave the canvas.
+        </p>
+    </div>
+    <div class="offcanvas-info">
+        <h4 class="offcanvas-mini-title">the fourth one</h4>
+        <p> for the fourth, i decided to forgo the movement, looking instead at the random shapes formed, always convex. 
+            i thought they looked like torsos, and wanted to expand this idea with legs and heads. the animation works like so - if you tap
+            the dots once, they will transform into legs. if you tap again, it will become a head. then you can create weirdly shaped mammals ! 
+            and you can make the mammal rock slowly back and forth with the left and right arrows.
+        </p>
+    </div>
+
+    <div class="offcanvas-info">
+        <h4 class="offcanvas-mini-title">some resources i used !</h4>
+        <p><ul>
             <li><a class="custom-link" target="_blank" href="https://www.algorithm-archive.org/contents/gift_wrapping/gift_wrapping.html">gift wrapping algorithm</a></li>
             <li><a class="custom-link" target="_blank" href="https://www.myphysicslab.com/pendulum/double-pendulum-en.html">double pendulum</a></li>
             <li><a class="custom-link" target="_blank" href="https://www.natureofcode.com">nature of code</a></li>
         </ul>
-    </p>
+        </p>
+    </div>
 {% endblock %}
 
 {% block body %}

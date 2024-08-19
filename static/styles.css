@@ -1,3 +1,21 @@
+/* COLOR SCHEME */
+.header, .blurb, .offcanvas-body, .offcanvas-header {
+    background-color: #fcba03;
+} 
+
+.navbar, .offcanvas-info {
+    background-color: #ffce47;
+}
+
+body {
+    background-color: white;
+}
+
+.offcanvas-header, .offcanvas-info, .blurb {
+    color: #fffbc9;
+}
+
+
 /* ENTIRETY OF SCREEN */
 body, html {
     height: 100%;
@@ -6,7 +24,6 @@ body, html {
 }
 
 body {
-    color: #fcba03;
     font-weight: bold;
     font-size: 15px;
 }
@@ -22,9 +39,6 @@ body {
 
 /* HEADER */
 .header {
-    background-color: #fcba03;
-    color: #ffffff;
-
     padding: 2rem 2rem 1rem 2rem;
     text-align: center;
 }
@@ -52,6 +66,7 @@ h1 a:hover {
 .navbar {
     background-color: #ffce47;
     font-weight: bold;
+    padding: 5px;
 }
 
 .mini-navbar {
@@ -63,32 +78,23 @@ h1 a:hover {
     margin: 0rem 1rem 0rem 1rem;
 }
 
-/* EXPLANATION */
-.expl {
-    background-color: #ffde59;
-    color: white;
-    text-align: center;
-    font-weight: normal;
-    padding: 5px;
-}
-
 /* ANIMATION ITSELF */
 iframe {
     flex: 1 1 auto;
 }
 
 /* FOR INDEX PAGE */
-.homepage {
-    padding: 10px;
-    background-color: #fcba03;
-    color: white;
-    height: 50vh;
-
-    align-content: center;
+.ca {
+    height: 85vh;
 }
 
-.ca {
-    height: 80vh;
+.blurb {
+    padding: 30px;
+}
+
+/* ATTRACTOR / SPERM PAGE */ 
+#attractor, #sperm {
+    margin: 3vw;
 }
 
 /* PLANETS PAGE */ 
@@ -129,19 +135,20 @@ iframe {
 
 .offcanvas {
     width: max(25vw, 300px);
-    text-align: left;
 }
 
 .offcanvas-header {
-    background-color: #fcba03;
-    color: white;
-    font-weight: bold;
-  }
+    padding: 20px;
+}
 
-.offcanvas-body {
-    background-color: #ffce47;
-    color: #fff1ba;
-    font-weight: normal;
+.offcanvas-mini-title {
+    margin-bottom: 5px;
+}
+
+.offcanvas-info {
+    font-weight: 550;
+    padding: 10px;
+    margin-bottom: 20px;
 }
 
 .custom-link, .custom-link:hover {
