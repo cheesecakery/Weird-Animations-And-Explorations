@@ -10,6 +10,15 @@
 </style>
 {% endblock %}
 
+{% block body %}
+
+<div class="planets">
+    {% for planet in planets %}
+        <iframe src ="/static/animations/planets/{{planet}}/index.html", class="planet" name="{{planet}}", title="{{planet}}", frameborder="0", scrolling="no"></iframe>
+    {% endfor %}
+</div>
+{% endblock %}
+
 {% block offcanvasheader %} planetary exploration {% endblock %}
 {% block offcanvastext %}
     <div class="offcanvas-info">
@@ -52,13 +61,4 @@
         i enjoy the chaos of it . i placed all the planet textures on this one because why not !
       </p>
     </div>
-{% endblock %}
-
-{% block body %}
-
-<div class="planets">
-    {% for planet in planets %}
-        <iframe src ="/static/animations/planets/{{planet}}/index.html", class="planet" name="{{planet}}", title="{{planet}}", frameborder="0", scrolling="no"></iframe>
-    {% endfor %}
-</div>
 {% endblock %}

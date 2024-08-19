@@ -5,12 +5,17 @@ let side = 100;
 let start = 0;
 let step = 0.01;
 
+let canvas;
+let parent;
+
+let scaleFactor;
+
+
 function setup() {
   let minSide = min(windowWidth, windowHeight);
-  createCanvas(minSide, minSide);
-  console.log(width);
-  background(255);
+  canvas = createCanvas(minSide, minSide);
 
+  background(255);
   drawPicture();
 }
 

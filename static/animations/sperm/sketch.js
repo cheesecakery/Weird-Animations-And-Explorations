@@ -11,6 +11,8 @@ let gameStarted = false;
 
 let sperm_heights;
 
+let startX = 50;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -40,7 +42,7 @@ function setup() {
 }
 
 function createSperm() {
-  let x = 0;
+  let x = startX;
   let y = sperm_heights[sperms.length];
 
   let m = 0.5;
@@ -63,7 +65,7 @@ function createSpirals() {
 
   let angle = v.heading();
 
-  for (let x = 50; x < dist; x += step) {
+  for (let x = startX + 50; x < dist; x += step) {
     let y = x * sin(angle);
     for (let wave of waves) {
       y += wave.evaluate(x);

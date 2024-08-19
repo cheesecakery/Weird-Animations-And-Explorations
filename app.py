@@ -14,9 +14,9 @@ def attractor():
     return render_template("attractor.html")
 
 @app.route("/sperm")
-def sperm():
-    b_c = "black"
-    return render_template("sperm.html", b_c=b_c)
+@app.route("/sperm/<mode>")
+def sperm(mode="animation"):
+    return render_template("sperm.html", mode=mode)
 
 @app.route("/wallpaper")
 @app.route("/wallpaper/<mode>")
