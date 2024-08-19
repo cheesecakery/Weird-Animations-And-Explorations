@@ -61,11 +61,11 @@ function createSperm() {
 function createSpirals() {
   let v = p5.Vector.sub(egg.pos, sperm.pos);
   let dist = v.mag() - egg.r - 25;
-  let step = dist / NO_OF_SPIRALS;
+  let step = dist / (NO_OF_SPIRALS + 1);
 
   let angle = v.heading();
 
-  for (let x = startX + 50; x < dist; x += step) {
+  for (let x = startX + step; x < dist; x += step) {
     let y = x * sin(angle);
     for (let wave of waves) {
       y += wave.evaluate(x);
@@ -90,8 +90,9 @@ function draw() {
 
   // Movement
   if (keyIsPressed) {
-    if (!gameStarted) {
+    if ((keyCode == UP_ARROW || keyCode == DOWN_ARROW) && gameStarted == false) {
       gameStarted = true;
+      sperm.applyForce(createVector(0.2, 0));
     }
 
     if (!sperm.inEgg) {

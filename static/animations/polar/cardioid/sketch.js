@@ -5,14 +5,17 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
   
-  let minSide = min([windowWidth, windowHeight]);
+  let minSide = min(width, height);
+
+  let scale = minSide * 0.15;
+  let len = minSide * 0.01;
 
   for (let i = 0; i < NO_OF_ROTATORS; i++) {
     let st_angle = i
     
     // Set inner radius of circle
     let r = sin(100 * st_angle);
-    r *= 100;
+    r *= scale;
 
     // spawn in a circle
     let pos = createVector(0, r);
@@ -22,12 +25,11 @@ function setup() {
     pop();
 
     // length of each line
-    let l = 10;
     let angle = pos.heading();
 
     let strt = 0;
 
-    let rotator = new myRotator(pos.x, pos.y, l, angle, strt);
+    let rotator = new myRotator(pos.x, pos.y, len, angle, strt);
     rotators.push(rotator);
   }
   

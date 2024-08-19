@@ -5,14 +5,18 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
   
-  let minSide = min([windowWidth, windowHeight]);
+  let minSide = min(width, height);
+
+  NO_OF_ROTATORS = 1.5 * minSide;
+  let scaleR = 0.0001 * minSide; 
+  let scaleL = 0.001 * minSide;
+  let scaleA = 0.025 * minSide;
 
   for (let i = 0; i < NO_OF_ROTATORS; i++) {
-    let st_angle = 0.025 * (i + 1)
+    let st_angle = scaleA * (i + 1)
     
-    // Set inner radius of circle
-    // let r = 300 * (sin(PI * st_angle));
-    let r = 30 * st_angle;
+    // Set inner radius of spiral
+    let r = scaleR * st_angle;
 
     // spawn in a circle
     let pos = createVector(0, r);
@@ -22,7 +26,7 @@ function setup() {
     pop();
 
     // length of each line
-    let l = 0.005 * pow(i, 3/2);
+    let l = scaleL * pow(i, 3/2);
     let angle = pos.heading();
 
     let strt = 0;

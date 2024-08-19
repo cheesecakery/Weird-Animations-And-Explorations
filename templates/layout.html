@@ -57,7 +57,7 @@
                 </div>
 
                 {% if active_page != 'index' %}
-                    <button class="btn {% if active_page in ['polar'] %} btn-dark {% else %} btn-warning {% endif %} ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target={{"#offcanvas-" + active_page}} aria-controls="offcanvas-giftwrapping">?</button>
+                    <button class="btn {% if active_page in ['sperm', 'polar'] %} btn-dark {% else %} btn-warning {% endif %} ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target={{"#offcanvas-" + active_page}} aria-controls="offcanvas-giftwrapping">?</button>
                 {% endif %}
             </nav>
             </div>

@@ -6,8 +6,8 @@ let curr_spot;
 let shape = [];
 const G = 1;
 
-const R = 100;
-const headR = 30;
+let r;
+let headR;
 let centre;
 
 let pendulums = [];
@@ -17,7 +17,10 @@ let fullShape = false;
 function setup() {
   createCanvas(windowWidth, windowWidth);
 
-  centre = createVector(50 + R, height / 2);
+  r = 0.2 * width;
+  headR = 0.09 * width;
+
+  centre = createVector(50 + r, height / 2);
 
   // more likely to have a smaller shape
   if (random() < 0.7) {
@@ -28,8 +31,8 @@ function setup() {
 
   // create all points
   for (let i = 0; i < NO_OF_SPOTS; i++) {
-    let x = random(50, 50 + 2 * R);
-    let y = random(height / 2 - R, height / 2 + R);
+    let x = random(50, 50 + 2 * r);
+    let y = random(height / 2 - r, height / 2 + r);
 
     let spot = createVector(x, y);
     spot.start = random(100);

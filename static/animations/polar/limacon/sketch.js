@@ -6,12 +6,13 @@ function setup() {
   background(0);
   
   let minSide = min([windowWidth, windowHeight]);
+  let scale = 0.15 * minSide;
 
   for (let i = 0; i < NO_OF_ROTATORS; i++) {
     let st_angle = (i + 0.0001);
     
     // Set inner radius of circle
-    let r = 75 * (1 + 3 * cos(st_angle));
+    let r = scale * (1 + 3 * cos(st_angle));
 
     // spawn in a circle
     let pos = createVector(0, r);
@@ -23,7 +24,7 @@ function setup() {
 
     let strt = 0;
 
-    let rotator = new myRotator(pos.x, pos.y, l, angle, strt);
+    let rotator = new myRotator(pos.x, pos.y - (width / 20), l, angle, strt);
     rotators.push(rotator);
   }
 }

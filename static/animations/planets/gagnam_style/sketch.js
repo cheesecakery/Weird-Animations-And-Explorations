@@ -35,7 +35,7 @@ function preload() {
 
 function setup() {
   frameRate(60);
-  
+  let minSide = min(windowWidth, windowHeight);
   createCanvas(windowWidth, windowHeight);
   strokeWeight(2);
 
@@ -52,7 +52,7 @@ function setup() {
     COVER
   );
 
-  let m = 1500;
+  let m = 1.5 * minSide;
   sun = new Sun(0, 0, m);
   
   let mlt = 1.5 / NO_OF_PLANETS;
@@ -62,7 +62,7 @@ function setup() {
   
   for (let i = 0; i < NO_OF_PLANETS; i++) {
     // let m = mlt * random(100, 150) * (i + 1);
-    let m = 40;
+    let m = 0.07 * minSide * random(0.9, 1.1);
     let img = imgs[i % imgs.length];
 
     let pos = p5.Vector.rotate(pos1, step * i);

@@ -6,12 +6,14 @@ function setup() {
   background(0);
   
   let minSide = min([windowWidth, windowHeight]);
+  let scale = 0.5 * minSide;
+  let l = 0.1 * minSide
 
   for (let i = 0; i < NO_OF_ROTATORS; i++) {
     let st_angle = 0.1 * (i + 1)
     
     // Set inner radius of circle
-    let r = 300 * (cos(1/100 * st_angle));
+    let r = scale * (cos(1/100 * st_angle));
 
     // spawn in a circle
     let pos = createVector(0, r);
@@ -21,7 +23,6 @@ function setup() {
     pop();
 
     // length of each line
-    let l = 100;
     let angle = pos.heading();
 
     let strt = 0;

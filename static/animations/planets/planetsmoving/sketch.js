@@ -21,6 +21,7 @@ function preload() {
 }
 
 function setup() {
+  let minSide = min(windowWidth, windowHeight);
   createCanvas(windowWidth, windowHeight);
   strokeWeight(2);
 
@@ -37,7 +38,7 @@ function setup() {
     COVER
   );
 
-  let m = 100;
+  let m = 0.1 * minSide;
   sun = new Sun(0, 0, m);
   
   let mlt = 1.5 / NO_OF_PLANETS;
@@ -45,7 +46,7 @@ function setup() {
   let pos1 = p5.Vector.random2D();
 
   for (let i = 0; i < NO_OF_PLANETS; i++) {
-    let m = 5 * (i + 1);
+    let m = 0.007 * minSide * (i + 1);
     let img = images[i % images.length];
 
     let pos = p5.Vector.random2D();

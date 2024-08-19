@@ -3,7 +3,7 @@ let perfect_circle;
 
 let night;
 
-let r = 50;
+let r;
 
 let a;
 let m;
@@ -18,7 +18,10 @@ function preload() {
 }
 
 function setup() {
+  let minSide = min(windowWidth, windowHeight);
   createCanvas(windowWidth, windowHeight);
+
+  r = minSide * 0.1;
   
   max_d = dist(0, 0, width / 2, height / 2);
 }

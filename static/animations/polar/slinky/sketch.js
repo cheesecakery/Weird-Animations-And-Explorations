@@ -3,13 +3,14 @@ let flowers = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  let minSide = min(width, height);
+  let r = minSide * 0.4;
   
   for (let i = 0; i < NO_OF_FLOWERS; i++) {
     let x = width / 2;
-    let y = height / 2;
+    let y = height / 2 + (height / 20);
     
     let v = 500;
-    let r = 200;
     
     let pace = random(2, 5);
     

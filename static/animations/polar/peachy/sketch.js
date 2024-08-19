@@ -3,16 +3,17 @@ let flowers = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  let minSide = min(width, height);
   
   let step = 2 * PI / NO_OF_FLOWERS;
+  let r = minSide * 0.2;
   
   for (let i = 0; i < NO_OF_FLOWERS; i++) {
     let x = width / 2;
     let y = height / 2;
     
     let v = 1000;
-    let r = 100;
-    
+
     let pace = 15;
     let strt = step * i;
     

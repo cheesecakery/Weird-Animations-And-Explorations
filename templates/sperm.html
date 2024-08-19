@@ -5,28 +5,26 @@
 
 {% block head %}
 <style>
-  body, html {
-    height: auto;
-    min-height: 100%;
-  } 
+  .header, .offcanvas-header, .offcanvas-body {
+    background-color: {{color[0]}};
+  }
+
+  .navbar, .offcanvas-info {
+    background-color: {{color[1]}};
+  }
+
+  .offcanvas-info, .offcanvas-header {
+    color: rgba(255, 255, 255, 0.5);
+  }
 
   body {
-    background-color: black;
+    background-color: {{color[0]}};
   }
 </style>
 {% endblock %}
 
 {% block body %}
-
-<iframe src = "/static/animations/sperm3/index.html", id="sperm2", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
-
-<div class="blurb">
-  <h4>the sperm game</h4>
-  <button class="btn btn-warning ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target={{"#offcanvas-" + active_page}} aria-controls="offcanvas-giftwrapping">?</button>
-</div>
-
 <iframe src = "/static/animations/sperm/index.html", id="sperm", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
-
 {% endblock %}
 
 {% block offcanvasheader %} the sperm game {% endblock %}
