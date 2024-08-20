@@ -159,12 +159,6 @@ iframe {
     }
 }
 
-@media (pointer: coarse) and (hover: none) {
-    #arrows {
-        display: none;
-    }
-}
-
 .giftwrap-image {
     width: 100%;
     /* height: 100%; */
@@ -199,4 +193,12 @@ iframe {
 .custom-link, .custom-link:hover {
     color: white;
     text-decoration: none;
+}
+
+/* PHONE STUFF */
+
+@media (pointer: coarse) and (hover: none) {
+    #arrows {
+        display: none;
+    }
 }
