@@ -25,10 +25,14 @@
 
 {% block body %}
 <iframe src = "/static/animations/sperm/index.html", id="sperm", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
+<iframe src = "/static/animations/sperm3/index.html", class="phone-content", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
 {% endblock %}
 
 {% block offcanvasheader %} the sperm game {% endblock %}
 {% block offcanvastext %}
+    <div class="offcanvas-info phone-content">
+      <h4 title="offcanvas-mini-title"> view on a bigger screen to play the game </p>
+    </div>
     <div class="offcanvas-info">
         <h4 title="offcanvas-mini-title">how to play</h4>
         <p>
@@ -53,4 +57,5 @@
         each sperm that latches onto the egg makes it crack a little more .
       </p>
     </div>
+    <div>
 {% endblock %}

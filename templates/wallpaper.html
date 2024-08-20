@@ -45,11 +45,7 @@
 {% endblock %}
 
 {% block body %}
-    <!-- <div class="giftwrap-image" id="wallpaper-fullscreen">
-        <script src="/static/animations/wallpaper/fullscreen/sketch.js"></script>
-        <script src="/static/animations/wallpaper/wallpaper.js"></script>
-    </div> -->
-<iframe src="/static/animations/wallpaper/{{mode}}/index.html", name="wallpaper", title="wallpaper", frameborder="0", scrolling="no"></iframe>
+<iframe src="/static/animations/wallpaper/{{mode}}/index.html", id="{{mode}}", name="wallpaper", title="wallpaper", frameborder="0", scrolling="no"></iframe>
 
 {% endblock %}
 

@@ -2,7 +2,10 @@
 const SIZE = 1.5;
 
 // Controls how far attractors can generate from sides
-let d = 75;
+let d;
+let r;
+let mass;
+let minSide;
 
 let jelly;
 
@@ -22,6 +25,10 @@ let divs = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight - 100);
+  minSide = min(width, height);
+  r = minSide * 0.4; 
+  d = minSide * 0.1;
+  mass = minSide * 0.5;
 
   jelly = new Jelly(width / 2, height / 2, 200, 200, 5);
 

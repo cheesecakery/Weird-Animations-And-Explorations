@@ -104,6 +104,21 @@ iframe {
     margin: 5vw;
 }
 
+.phone-content {
+    display: none;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    #sperm {
+        display: none;
+    }
+
+    .phone-content {
+        display: block;
+    }
+}
+
 #sperm-game, #sperm-game:hover {
     margin: 10px;
     padding: 5px;
@@ -141,6 +156,12 @@ iframe {
 @media (max-width: 800px) {
     .giftwrapping {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (pointer: coarse) and (hover: none) {
+    #arrows {
+        display: none;
     }
 }
 
