@@ -198,7 +198,11 @@ iframe {
 /* PHONE STUFF */
 
 @media (pointer: coarse) and (hover: none) {
-    #arrows {
+    #arrows, #sperm {
         display: none;
+    }
+
+    .phone-content {
+        display: block;
     }
 }
