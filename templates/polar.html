@@ -10,11 +10,11 @@
 
 {% set polar_bar = [
     ('peachy', 'peachy', 'peachy'),
+    ('crinkling_spiral', 'crinkling_spiral', 'crinkling spiral'),
     ('iris', 'iris', 'iris'),
     ('slinky', 'slinky', 'slinky'),
-    ('crinkling_spiral', 'crinkling_spiral', 'crinkling spiral'),
-    ('circles', 'circles', 'circles'),
     ('limacon', 'limacon', 'limaçon'),
+    ('circles', 'circles', 'circles'),
     ('cardioid', 'cardioid', 'cardioid'),
     ('eye_spiral', 'eye_spiral', 'eye spiral'),
     ('limacon2', 'limacon2', 'limaçon: the sequel')
@@ -45,24 +45,14 @@
 
 {% endblock %}
 
-{% block offcanvasheader %} polar coordinates {% endblock %}
-{% block offcanvastext %}
-    <div class="offcanvas-info">
-      <h4 class="offcanvas-mini-title">some stuff i wanna say</h4>
-      <p>
-        so, the ideas of these first stemmed with when i learnt about polar coordinates in a-level further maths. i wasn't doing 
-        animations then, but i was playing around a lot in desmos, as i realised that the splitting of coordinates into (r, theta) form  
-        instead meant i could make some quite interesting curvatures
-      </p>
-      <p>
-        so, in these animations,, i used copious amounts of sines and cosines and tans of course - both in the way the particles spawn on the canvas, and in the way and the speed 
-        at which they move.
-      </p>
-    </div>
-{% endblock %}
-
 {% block body %}
-  <iframe src = "/static/animations/polar/{{animation}}/index.html", name="{{animation}}", title="{{animation}}", frameborder="0", scrolling="no"></iframe>
+  <div class="sketchDiv" id="{{animation}}">
+    <script src="/static/animations/polar/flower.js"></script>
+    <script src="/static/animations/polar/rotator.js"></script>
+    {% for script in scripts %}
+      <script src="/static/animations/polar/{{animation}}/{{script}}.js"></script>
+    {% endfor %}
+  </div>
 {% endblock %}
 
 {% block bottom %}
@@ -77,4 +67,20 @@
         </li>
     {% endif %}
   {% endfor %}
+{% endblock %}
+
+{% block offcanvasheader %} polar coordinates {% endblock %}
+{% block offcanvastext %}
+    <div class="offcanvas-info">
+      <h4 class="offcanvas-mini-title">some stuff i wanna say</h4>
+      <p>
+        so, the ideas of these first stemmed with when i learnt about polar coordinates in a-level further maths. i wasn't doing 
+        animations then, but i was playing around a lot in desmos, as i realised that the splitting of coordinates into (r, theta) form  
+        instead meant i could make some quite interesting curvatures
+      </p>
+      <p>
+        so, in these animations,, i used copious amounts of sines and cosines and tans of course - both in the way the particles spawn on the canvas, and in the way and the speed 
+        at which they move.
+      </p>
+    </div>
 {% endblock %}

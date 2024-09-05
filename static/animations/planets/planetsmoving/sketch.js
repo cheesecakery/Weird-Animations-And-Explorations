@@ -1,121 +1,154 @@
-let sun;
-let planets = [];
-const NO_OF_PLANETS = 2;
+import { Planet } from '../planet.js'
+import { Sun } from '../sun.js'
 
-const G = 2;
-const SIZE = 15;
+const planetsmoving = new p5((sketch) => {
+	const N = 2;
 
-let night;
-let sun_img;
-let shading;
-let images;
+	let sun;
+	let night;
 
-function preload() {
-  night = loadImage("../images/night.jpg");
-  sun_img = loadImage("../images/sun2.png");
-  let blue = loadImage("../images/blue_planet_no_shade.png");
-  let grassy = loadImage("../images/grassy_planet_no_shade.png");
-  shading = loadImage('../images/shading2.png');
+	let planets = [];
+	let planetImgs = [];
 
-  images = [blue, grassy];
-}
+	sketch.SIZE = 15;
+	sketch.G = 2;
 
-function setup() {
-  let minSide = min(windowWidth, windowHeight);
-  createCanvas(windowWidth, windowHeight);
-  strokeWeight(2);
+	let parent_id = "planetsmoving";
+	let parent;
+	sketch.animate = false;
 
-  image(
-    night,
-    0,
-    0,
-    width,
-    height,
-    0,
-    0,
-    night.width,
-    night.height,
-    COVER
-  );
+	let img_names = ['blue_planet', 'grassy',
+	'earth_planet', 'meteor', 'black_planet', 'crystal_planet',
+	'desert_planet', 'green_planet', 'magnet_planet', 'moon_planet', 
+	'purple_planet', 'red_planet', 'turq_planet', 'wood_planet'
+	]
 
-  let m = 0.1 * minSide;
-  sun = new Sun(0, 0, m);
-  
-  let mlt = 1.5 / NO_OF_PLANETS;
-  
-  let pos1 = p5.Vector.random2D();
+	document.getElementById("planets").addEventListener('slid.bs.carousel', function(event) {
+		let planet_id = event.target.querySelector('.active').id;
+		if (planet_id == parent_id) {
+			setupSketch();
+			sketch.animate = true; 
+		} else {
+			sketch.animate = false;
+		}
+	});
 
-  for (let i = 0; i < NO_OF_PLANETS; i++) {
-    let m = 0.007 * minSide * (i + 1);
-    let img = images[i % images.length];
+	sketch.preload = () => {
+		let root = "/static/animations/planets/images/"
+		night = sketch.loadImage(root+"night.jpg");
+		sketch.sunImg = sketch.loadImage(root+"sun2.png");
+		sketch.shading = sketch.loadImage(root+"shading2.png");
 
-    let pos = p5.Vector.random2D();
-    pos.mult(400);
+		let blue = sketch.loadImage(root+"blue_planet_no_shade.png");
+		let grassy = sketch.loadImage(root+"grassy_planet_no_shade.png");
+		
+		planetImgs = [blue, grassy];
+	}
+	
+	sketch.setup = () => {
+		sketch.createCanvas(0, 0);
+		setupSketch();
+		sketch.animate = true;
+	}
 
-    let planet = new Planet(pos.x, pos.y, m, img, 2, 3);
-    planets.push(planet);
+	function setupSketch() {
+		if (!sketch.animate) {
+			planets = [];
+			parent = document.getElementById(parent_id);
+			sketch.resizeCanvas(
+				parent.offsetWidth,
+				parent.offsetHeight,
+			);
+	
+			let scale = sketch.min(sketch.width, sketch.height);
+	
+			sun = new Sun(0, 0, 0.1*scale, sketch);
+	
+			createPlanets(scale);
+	
+			drawNight();
+		}
+	}
 
-    // Every other planet is above
-    planet.prevAbove = i % 2;
-  }
-}
+	sketch.draw = () => {
+		if (sketch.animate) {
+			drawNight();
 
-function draw() {
-  image(
-    night,
-    0,
-    0,
-    width,
-    height,
-    0,
-    0,
-    night.width,
-    night.height,
-    COVER
-  );
-  
-  // Calculate which will be drawn above, which below
-  let planets_above = [];
-  let planets_below = [];
-  for (let planet of planets) {
-    if (planet.touchingSun && planet.prevAbove) {
-      planets_below.push(planet);
-    } else {
-      planets_above.push(planet);
-    }
-  }
+			// Move planets
+			for (let planet of planets) {
+				sun.attract(planet);
+				sun.touches(planet);
+				planet.move();
+			}
+	
+			// Calculate which will be drawn above, which below
+			let planets3D = aboveOrBelow(planets);
+			
+			sketch.push();
+				sketch.imageMode(sketch.CENTER);
+				sketch.translate(sketch.width / 2, sketch.height / 2);
+				// Display planets & sun in the middle
+				for (let planet of planets3D['planetsBelow']) {
+					planet.display2();
+				}
+			
+				sun.draw();
+			
+				for (let planet of planets3D['planetsAbove']) {
+					planet.display2();
+				}
+			sketch.pop();
+		}
+	}
 
-  push();
-  imageMode(CENTER);
-  translate(width / 2, height / 2);
-  
-  // Some planets are drawn below, some are drawn above
-  for (let planet of planets_below) {
-    sun.attract(planet);
-    sun.touches(planet);
+	function createPlanets(scale) {
+		let startPos = p5.Vector.random2D();
+		let step = sketch.TWO_PI / N;
+		
+		for (let i = 0; i < N; i++) {
+			let pos = p5.Vector.random2D().mult(sketch.width / 4);
+			let planet = new Planet(
+				pos.x,
+				pos.y,
+				0.007 * scale * (i + 1),
+				planetImgs[i % planetImgs.length],
+				2,
+				3,
+				sketch
+			);
 
-    planet.move();
-    planet.display2();
-  }
+			planet.prevAbove = i % 2;
+			planets.push(planet);
+		}
+	}
 
-  sun.draw();
+	function aboveOrBelow(planets) {
+		let planets3D = {'planetsAbove': [], 'planetsBelow': []};
 
-  for (let planet of planets_above) {
-    sun.attract(planet);
-    sun.touches(planet);
+		for (let planet of planets) {
+			if (planet.touchingSun && planet.prevAbove) {
+				planets3D['planetsAbove'].push(planet);
+			} else {
+				planets3D['planetsBelow'].push(planet);
+			}
+		}
 
-    planet.move();
-    planet.display2();
-  }
-  pop();
-}
+		return planets3D;
+	}
 
-function randomSubArray(array, n) {  
-  // Remove 1 element
-  for (let i = 0; i < array.length - n; i++) {
-    let r = floor(random(array.length));
-    array.splice(r, 1);
-  }
-  
-  return array;
-}
+	function drawNight() {
+		// Draw night sky
+		sketch.image(
+			night,
+			0,
+			0,
+			sketch.width,
+			sketch.height,
+			0,
+			0,
+			night.width,
+			night.height,
+			sketch.COVER
+		);
+	}
+}, 'planetsmoving');

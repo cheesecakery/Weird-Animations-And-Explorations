@@ -2,10 +2,20 @@
 {% set active_page = "giftwrapping" %}
 {% set giftwraps = [
     'bouncing',
-    'mutatr', 
+    'mutatr',
     'gravattr',
     'giftwrap1'
 ] %}
+
+{% block body %}
+    <div class="giftwrapping">
+        {% for giftwrap in giftwraps %}
+            <div class="giftwrap-image" id="{{giftwrap}}">
+                <script src="/static/animations/giftwrapping/{{giftwrap}}/sketch.js" type="module"></script>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
 
 {% block offcanvasheader %} gift wrapping {% endblock %}
 {% block offcanvastext %}
@@ -44,12 +54,4 @@
         </ul>
         </p>
     </div>
-{% endblock %}
-
-{% block body %}
-<div class="giftwrapping">
-    {% for folder in giftwraps %}
-        <iframe src="/static/animations/giftwrapping/{{folder}}/index.html", class="giftwrap-image", name="{{folder}}", title="{{folder}}", frameborder="0", scrolling="no"></iframe>
-    {% endfor %}
-</div>
 {% endblock %}

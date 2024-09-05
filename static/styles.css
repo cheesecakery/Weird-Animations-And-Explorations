@@ -20,7 +20,11 @@ body {
 body, html {
     height: 100%;
     width: 100%;
-    margin: 0;
+}
+
+canvas {
+    display: block;
+    margin: auto;
 }
 
 body {
@@ -30,7 +34,7 @@ body {
 
 .mainscreen {
     height: 100%;
-    min-height: 100%;
+    /* min-height: 100%; */
 
     display: flex;
     flex-flow: column;
@@ -86,13 +90,18 @@ h1 a:hover {
   }
 
 /* ANIMATION ITSELF */
+.sketchDiv {
+    flex: 1 1 auto;
+}
+
 iframe {
     flex: 1 1 auto;
 }
 
 /* FOR INDEX PAGE */
-.ca {
+#ca {
     height: 85vh;
+    overflow: hidden;
 }
 
 .blurb {
@@ -101,12 +110,28 @@ iframe {
 
 /* SPERM PAGE */ 
 #sperm {
-    margin: 5vw;
+    flex: 1 1 auto;
+}
+
+#sperm3 {
+    display: none;
 }
 
 .phone-content {
     display: none;
-    margin: 0;
+}
+
+/* PHONE STUFF */
+
+@media (pointer: coarse) and (hover: none) {
+    #sperm {
+        display: none;
+    }
+
+    #sperm3 {
+        display: block;
+        height: 100%;
+    }
 }
 
 @media (max-width: 600px) {
@@ -114,30 +139,30 @@ iframe {
         display: none;
     }
 
+    #sperm3 {
+        display: block;
+        height: 100%;
+    }
+
     .phone-content {
         display: block;
     }
 }
 
-#sperm-game, #sperm-game:hover {
-    margin: 10px;
-    padding: 5px;
-    font-weight: bold;
-    background-color: #14171f;
-    color: rgba(255, 255, 255, 0.5);
-    border: 0;
-
-    text-decoration: none;
+/* WALLPAPER PAGE */
+.wallpaper, #attractor {
+    flex: 1 1 auto;
 }
 
-/* PLANETS PAGE */ 
-.planets {
-    display: flex;
-    flex-flow: column;
-}
-
-.planet {
+/* PLANETS */
+#planets {
+    width: 100%;
     height: 100vh;
+}
+
+.planet, .carousel-item {
+    width: 100%;
+    height: 100%;
 }
 
 /* GIFTWRAPPING PAGE */
@@ -193,16 +218,4 @@ iframe {
 .custom-link, .custom-link:hover {
     color: white;
     text-decoration: none;
-}
-
-/* PHONE STUFF */
-
-@media (pointer: coarse) and (hover: none) {
-    #arrows, #sperm {
-        display: none;
-    }
-
-    .phone-content {
-        display: block;
-    }
 }

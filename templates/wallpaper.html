@@ -1,6 +1,37 @@
 {% extends "layout.html" %}
 {% set active_page = "wallpaper" %}
-{% set wallpaper_bar = ['arrows', 'drag', 'fullscreen'] %}
+{% set wallpaper_bar = [
+    ('fullscreen', 'fullscreen', ['sketch.js']),
+    ('arrows', 'arrows', ['particle.js', 'sketch.js']),
+    ('drag', 'drag', ['sketch.js'])
+    ] %}
+
+{% block body %}
+    <div class="wallpaper" id="{{mode}}">
+        <script src="/static/animations/wallpaper/wallpaper.js"></script>
+        {% for title, href, files in wallpaper_bar %}
+            {% if href == mode %}
+                {% for file in files %}
+                    <script src="/static/animations/wallpaper/{{mode}}/{{file}}"></script>
+                {% endfor %}
+            {% endif %}
+    {% endfor %}
+    </div>
+{% endblock %}
+    
+{% block bottom %}
+    {% for title, href, files in wallpaper_bar %}
+        {% if href == mode %}
+            <li class="nav-item">
+                <a class="nav-link active" href="/wallpaper/{{ href|e }}">{{title|e}}<span class="visually-hidden">(current)</span></a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/wallpaper/{{ href|e }}">{{title|e}}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
 
 {% block offcanvasheader %} wallpaper drawings {% endblock %}
 {% block offcanvastext %}
@@ -14,7 +45,7 @@
                 <li>-/+ to change size of brush</li>
                 <li>c to clear the canvas</li>
                 <li>s to take a screenshot</li>
-                        {% elif mode == 'drag' %}
+        {% elif mode == 'drag' %}
             <p>drag to draw on the canvas !</p>
         {% else %}
             <ul>
@@ -25,39 +56,21 @@
     </div>
 
     <div class="offcanvas-info">
-    <h4 title="offcanvas-mini-title">some stuff i wanted to say</h4>
-    <p> found the algorithm for this in a book - the new turing omnibus ( by a. k. dewdney )
-        i thought it looked really cool ! 
-    </p><p>
-        had fun exploring the capabilities in p5 for manipulating different layers of canvas
-    </p>
-        and immediately felt the need to have it be 'revealed' - at first i made a bouncing ball sketch, which was 
-        pretty awesome
-    </p>
-    <p>
-        but then i settled on the idea of 'uncovering' the wallpaper underneath . whether that be by 
-        using arrows to dig it up, or scratching at it with your mouse ...
-    </p> <p>
-    or, as in the case of the fullscreen version , a navigating of it , an exploration 
-    </p>
+        <h4 title="offcanvas-mini-title">some stuff i wanted to say</h4>
+
+        <p> found the algorithm for this in a book - the new turing omnibus ( by a. k. dewdney )
+            i thought it looked really cool ! 
+        </p><p>
+            had fun exploring the capabilities in p5 for manipulating different layers of canvas
+        </p>
+            and immediately felt the need to have it be 'revealed' - at first i made a bouncing ball sketch, which was 
+            pretty awesome
+        </p>
+        <p>
+            but then i settled on the idea of 'uncovering' the wallpaper underneath . whether that be by 
+            using arrows to dig it up, or scratching at it with your mouse ...
+        </p> <p>
+        or, as in the case of the fullscreen version , a navigating of it , an exploration 
+        </p>
     </div>
-
-{% endblock %}
-
-{% block body %}
-<iframe src="/static/animations/wallpaper/{{mode}}/index.html", id="{{mode}}", name="wallpaper", title="wallpaper", frameborder="0", scrolling="no"></iframe>
-{% endblock %}
-
-{% block bottom %}
-{% for href in wallpaper_bar %}
-                {% if href == mode %}
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/wallpaper/{{ href|e }}">{{href|e}}<span class="visually-hidden">(current)</span></a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/wallpaper/{{ href|e }}">{{href|e}}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
 {% endblock %}

@@ -1,48 +1,49 @@
-class Wave {
-  constructor(x, y, r, d, l, th, angleV) {
-    this.pos = createVector(x, y);
-    this.angle = 0;
-    this.angleV = angleV;
+export class Wave {
+	constructor(pos, r, d, l, angleV, sketch) {
+		this.sketch = sketch;
 
-    this.r = r;
-    this.d = d;
-    this.l = l;
-    
-    this.th = th;
-  }
+		this.pos = pos;
+		this.angle = 0;
+		this.angleV = angleV;
 
-  move() {
-    this.angle += this.angleV;
-    this.angle = this.angle % ((this.l / this.d) + 5);
-  }
+		this.r = r;
+		this.d = d;
+		this.l = l;
+	}
 
-  draw() {
-    push();
-    translate(this.pos.x, this.pos.y);
+	move() {
+		this.angle += this.angleV;
+		this.angle = this.angle % ((this.l / this.d) + 5);
+	}
 
-    stroke(255);
-    strokeWeight(this.th);
+	draw() {
+		this.sketch.push();
+			this.sketch.translate(this.pos.x, this.pos.y);
+			// Set attributes
+			this.sketch.stroke(255);
+			this.sketch.strokeWeight(0.05);
 
-    let pos = createVector(this.angle, sin(this.angle));
-    pos.mult(this.d);
+			// Responsible for movement up & down
+			let pos = this.sketch.createVector(this.angle, this.sketch.sin(this.angle));
+			// ??
+			pos.mult(this.d);
 
-    translate(pos.x, pos.y);
+			this.sketch.translate(pos.x, pos.y);
 
-    noFill();
-    beginShape();
-    for (let a = 0; a < TWO_PI; a += 0.01) {
-      let theta = map(a, 0, TWO_PI, 0, 30 * TWO_PI);
+			this.sketch.noFill();
+			this.sketch.beginShape();
+			for (let a = 0; a < this.sketch.TWO_PI; a += 0.01) {
+				let sinV = 10 * this.sketch.sin(30*a);
 
-      let sin_v = 10 * sin(theta);
+				// Shake it about
+				let r = this.r + sinV;
 
-      let r1 = this.r + sin_v;
-
-      let x = r1 * cos(a);
-      let y = r1 * sin(a);
-
-      vertex(x, y);
-    }
-    endShape(CLOSE);
-    pop();
-  }
+				this.sketch.vertex(
+					r*this.sketch.cos(a),
+					r*this.sketch.sin(a)
+				);
+			}
+			this.sketch.endShape(this.sketch.CLOSE);
+		this.sketch.pop();
+	}
 }

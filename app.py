@@ -3,8 +3,6 @@ import git
 
 app = Flask(__name__)
 
-app.config["SESSION_PERMANENT"] = True
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -34,4 +32,16 @@ def giftwrapping():
 @app.route("/polar")
 @app.route("/polar/<animation>")
 def polar(animation='peachy'):
-    return render_template("polar.html", animation=animation)
+    scripts = {
+        'peachy': ['peach', 'sketch'],
+        'iris': ['circle', 'sketch'],
+        'slinky': ['slink', 'sketch'],
+        'crinkling_spiral': ['myRotator', 'sketch'],
+        'circles': ['sketch'],
+        'limacon': ['myRotator', 'sketch'],
+        'cardioid': ['myRotator', 'sketch'],
+        'eye_spiral': ['myRotator', 'sketch'],
+        'limacon2': ['disc', 'myRotator', 'sketch']
+    }
+
+    return render_template("polar.html", animation=animation, scripts=scripts[animation])

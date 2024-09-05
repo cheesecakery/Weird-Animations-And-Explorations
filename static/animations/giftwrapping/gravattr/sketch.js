@@ -1,77 +1,113 @@
-const NO_OF_SPOTS = 15;
-let spots = [];
+import { Triangular } from '../triangular.js'
+import { jarvis_march } from '../jarvis.js'
+import { Attractor } from './attractor.js'
 
-let attractor;
+const gravattr = new p5((sketch) => {
+	const NO_OF_PARTICLES = 15;
+	let particles = [];
 
-const G = 1;
-const SIZE = 3;
+  	let attractor;
 
-let spawnRadius = 100;
+	const G = 1;
+	const SIZE = 3;
 
-let showArrows = true;
+	let showArrows = true; 
 
-let shape = [];
-let pendulums = [];
+	let shape = [];
 
-function setup() {
-  createCanvas(windowWidth, windowWidth);
-  background(74, 73, 77);
+	sketch.setup = () => {
+		// Create the canvas
+		sketch.createCanvas(
+			document.getElementById("gravattr").offsetWidth, 
+			document.getElementById("gravattr").offsetHeight
+		);
+		sketch.background(74, 73, 77);
 
-  // create all spots
-  for (let i = 0; i < NO_OF_SPOTS; i++) {
-    let x = random(width / 2 - spawnRadius, width / 2 + spawnRadius);
-    let y = random(height / 2 - spawnRadius, height / 2 + spawnRadius);
-    let pos = createVector(x, y);
+		let spawnRadius = sketch.width / 4;
+	
+		// Create all the particles
+		for (let i = 0; i < NO_OF_PARTICLES; i++) {
+			// Create the position of each particle in a radius of r around the centre
+			let pos = sketch.createVector(
+				sketch.random(sketch.width / 2 - spawnRadius, sketch.width / 2 + spawnRadius),
+				sketch.random(sketch.height / 2 - spawnRadius, sketch.height / 2 + spawnRadius)
+			);
 
-    // Spawns 
-    let vel = pos.copy();
-    vel.normalize();
-    vel.rotate(PI / 2);
+			// Let the velocity of the particle be perpendicular to its position
+			let vel = pos.copy().sub(sketch.createVector(sketch.width / 2, sketch.height / 2));
+			vel.normalize();
+			vel.rotate(sketch.PI / 2);
+	
+			// Create particle with position, velocity, mass, size, G and sketch
+			particles.push( new Triangular(
+				pos.x,
+				pos.y,
+				vel.x, 
+				vel.y,
+				2,
+				SIZE,
+        		G,
+				sketch
+			));
+		}
 
-    let spot = new Triangular(pos.x, pos.y, vel.x, vel.y, 2);
-    spots.push(spot);
-  }
+		// Create attractor
+		attractor = new Attractor(
+			sketch.width / 2,
+			sketch.height / 2,
+			5,
+			G,
+			sketch
+		);
+	}
 
-  attractor = new Attractor(width / 2, height / 2, 5);
+	sketch.draw = () => {
+		sketch.background(74, 73, 77);
+	  
+		// Let each particle attract one another
+		for (let particle of particles) {
+		  for (let other of particles) {
+			if (other != particle) {
+			  particle.attract(other);
+			}
+		  }
+		  
+      	attractor.attract(particle);
+			particle.move();
 
-  jarvis_march();
-}
+			// Draw only if particles are visible
+			if (showArrows) {
+				particle.update();
+			}
+		}
 
-function draw() {
-  background(74, 73, 77);
+		// Updates depending on positions of spots
+		shape = jarvis_march(sketch, particles);
+	  
+		// Draw the shape around the particles
+		sketch.noFill();
+		sketch.stroke(255);
+		sketch.strokeWeight(0.5);
 
-  for (let spot of spots) {
-    for (let other of spots) {
-      if (other != spot) {
-        spot.attract(other);
-      }
-    }
+		sketch.beginShape();
+		for (let particle of shape) {
+			sketch.vertex(particle.pos.x, particle.pos.y);
+		}
+		sketch.endShape(sketch.CLOSE);
+	}
 
-    attractor.attract(spot);
+	// Toggle visibility of arrows !
+	sketch.mouseClicked = () => {
+		if (onCanvas(sketch.mouseX, sketch.mouseY)) {
+			showArrows = !showArrows;
+		}
+	}
 
-    spot.move();
-    if (showArrows) {
-      spot.update();
-    }
-  }
-
-  // attractor.update();
-
-  // updates depending on positions of spots
-  shape = [];
-  jarvis_march();
-
-  noFill();
-  stroke(255);
-  strokeWeight(0.5);
-
-  beginShape();
-  for (let spot of shape) {
-    vertex(spot.pos.x, spot.pos.y);
-  }
-  endShape(CLOSE);
-}
-
-function mouseClicked() {
-  showArrows = !showArrows;
-}
+	function onCanvas(x, y) {
+		if (x >= 0 && x <= sketch.width && y >= 0 && y <= sketch.height) {
+			return true;
+		}
+		return false;
+	}
+	
+}, 'gravattr');

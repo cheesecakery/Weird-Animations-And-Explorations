@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% set active_page = "index" %}
 
-{% set animation = [
-    'ahhhh', 'cellularautomata', 'dbpendulum', 
-    'fire', 'phosphene', 'rectangular', 'worleynoise'] | random %}
-
 {% block head %}
     <style>
+        body {
+            background-color: black;
+        }
+
         body, html {
             height: auto;
             min-height: 100%;
@@ -15,7 +15,9 @@
 {% endblock %}
 
 {% block body %}
-<iframe src = "/static/animations/homepage/cellularautomata/index.html", class="ca", name="{{animation}}", title="{{animation}}", frameborder="0", scrolling="no"></iframe>
+<div class="canvas-div" id="ca" name="ca">
+    <script src="/static/animations/homepage/cellularautomata/sketch.js"></script>
+</div>
 
 <div class="blurb">
     <p> hello!! i am sonja lundh</p>

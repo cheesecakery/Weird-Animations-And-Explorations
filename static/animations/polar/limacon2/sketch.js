@@ -2,7 +2,9 @@ let NO_OF_DISCS = 1;
 let discs = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let parent = document.getElementById("limacon2");
+  let canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
+  canvas.parent(parent);
   background(0);
 
   let minSide = min(width, height);

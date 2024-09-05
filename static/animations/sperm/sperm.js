@@ -1,124 +1,122 @@
-class Sperm {
-  constructor(x, y, m, d, l, th, angleV) {
-    this.pos = createVector(x, y);
-    this.vel = createVector(0, 0);
-    this.acc = createVector(0, 0);
+export class Sperm {
+	constructor(pos, m, l, angleV, sketch) {
+		this.sketch = sketch;
 
-    this.max_height = y + 50;
-    this.min_height = y - 50;
+		this.pos = pos;
+		this.vel = sketch.createVector(0, 0);
+		this.acc = sketch.createVector(0, 0);
 
-    this.angle = 0;
-    this.angleV = angleV;
+		this.angle = 0;
+		this.angleV = angleV;
 
-    this.m = m;
-    this.r = sqrt(m) * 5;
-    this.d = d;
-    this.l = l;
+		this.m = m;
+		this.r = sketch.sqrt(m) * 5;
+		this.l = l;
 
-    this.th = th;
+		this.wait = true;
+	}
 
-    this.moving = true;
-    this.inEgg = false;
-  }
+	applyForce(force) {
+		// Scale by weight
+		let f = p5.Vector.div(force, this.m);
+		this.acc.add(f);
+	}
 
-  applyForce(force) {
-    let f = p5.Vector.div(force, this.m);
-    this.acc.add(f);
-  }
+	move() {
+		// Move forward
+		this.vel.add(this.acc);
+		this.vel.limit(0.98);
+		this.pos.add(this.vel);
+		this.acc.set(0, 0);
+		
+		// Have a little erratic movement to mimic a sperm
+		this.pos.x += this.angleV;
+		this.angle += this.angleV;
+		this.pos.y += 0.2 * this.sketch.sin(this.angle);
+	}
 
-  move() {
-    if (this.moving) {
-      if (this.inEgg) {
-        let dist = p5.Vector.sub(egg.pos, this.pos);
-        this.vel = dist.copy();
-        this.vel.mult(0.1);
-        this.vel.limit(1);
-        this.pos.add(this.vel);
-      } else {
-        this.vel.limit(0.98);
+	settle(egg) {
+		let dist = p5.Vector.sub(egg.pos, this.pos);
+		// If distance between centre of egg and sperm is miniscule, then stop moving.
+		if (dist.mag() < 5) {
+			this.stopMoving();
 
-        this.vel.add(this.acc);
-        this.vel.limit(1.0);
-        this.pos.add(this.vel);
+			setTimeout(() => {
+				this.sketch.gameEnded = true;
+				return;
+			}, 2000);
+		}
 
-        this.acc.set(0, 0);
-      }
+		// Move toward centre of egg
+		this.vel = dist.copy().mult(0.01).limit(1);
+		this.pos.add(this.vel);
 
-      this.pos.x += this.angleV;
-      this.pos.y += 0.2 * sin(this.angle);
+		this.pos.x += this.angleV * 0.1;
+		this.angle += this.angleV * 0.1;
+		this.pos.y += 0.2 * this.sketch.sin(this.angle);
+	}
 
-      this.angle += this.angleV;
-    }
-  }
+	// Check if sperm contains spiral
+	contain(spiral) {
+		// If distance between the two is smaller than magnitude & length
+		let dist = p5.Vector.sub(spiral.pos, this.pos);
+		if (dist.mag() <= this.r + this.l) {
+			return true;
+		}
+		return false;
+	}
 
-  contain(spiral) {
-    let dist = p5.Vector.sub(spiral.pos, this.pos);
+	eat(spiral) {
+		// Give sperm a little push
+		let push = this.sketch.createVector(10000, 0);
+		this.applyForce(push);
 
-    if (dist.mag() <= this.r + this.l) {
-      return true;
-    }
-    return false;
-  }
+		// Remove spiral from array
+		let index = this.sketch.spirals.indexOf(spiral);
+		this.sketch.spirals.splice(index, 1);
+	}
 
-  eat(spiral) {
-    let push = createVector(1, 0);
-    this.applyForce(push);
+	// Stop the sperm's movement !
+	stopMoving() {
+		this.acc.set(0, 0);
+		this.vel.set(0, 0);
+	}
 
-    // Remove spiral from array
-    let index = spirals.indexOf(spiral);
-    spirals.splice(index, 1);
-  }
+	// Wrap around the screen
+	wrap() {
+		if (this.pos.x <= -this.r) {
+			this.pos.x = this.sketch.width + this.r;
+		} else if (this.pos.x >= this.sketch.width + this.r) {
+			this.pos.x = -this.r;
+		}
 
-  stopMoving() {
-    this.moving = false;
+		if (this.pos.y <= -this.r) {
+			this.pos.y = this.sketch.height + this.r;
+		} else if (this.pos.y >= this.sketch.height + this.r) {
+			this.pos.y = -this.r;
+		}
+	}
 
-    this.acc.set(0, 0);
-    this.vel.set(0, 0);
-  }
+	draw() {
+		this.sketch.push();
+			this.sketch.translate(this.pos.x, this.pos.y);
 
-  settle() {
-    let dist = p5.Vector.sub(this.pos, egg.pos);
-    if (dist.mag < 5) {
-      sperm.stopMoving();
-    }
-  }
+			// Draw white and thin outline
+			this.sketch.stroke(360);
+			this.sketch.strokeWeight(0.05);
+			this.sketch.noFill();
 
-  wrap() {
-    if (this.pos.x <= -this.r) {
-      this.pos.x = width + this.r;
-    } else if (this.pos.x >= width + this.r) {
-      this.pos.x = -this.r;
-    }
+			// Make the shape of the sperm as a circle
+			this.sketch.beginShape();
+			// Go round the length of a circle
 
-    if (this.pos.y <= -this.r) {
-      this.pos.y = height + this.r;
-    } else if (this.pos.y >= height + this.r) {
-      this.pos.y = -this.r;
-    }
-  }
-
-  draw() {
-    push();
-    translate(this.pos.x, this.pos.y);
-
-    stroke(255);
-    strokeWeight(this.th);
-
-    noFill();
-    beginShape();
-    for (let a = 0; a < TWO_PI; a += 0.01) {
-      let theta = map(a, 0, TWO_PI, 0, 30 * TWO_PI);
-
-      let sin_v = this.l * sin(theta);
-
-      let r1 = this.r + sin_v;
-
-      let x = r1 * cos(a);
-      let y = r1 * sin(a);
-
-      vertex(x, y);
-    }
-    endShape(CLOSE);
-    pop();
-  }
+			for (let a = 0; a < this.sketch.TWO_PI; a += 0.01) {
+				// make the dangly bits around the circle - super long & thin !
+				let sinV = this.l * this.sketch.sin(30*a);
+				let pos = this.sketch.createVector(this.sketch.cos(a), this.sketch.sin(a)).mult(this.r + sinV);
+				this.sketch.vertex(pos.x, pos.y);
+			}
+			this.sketch.endShape(this.sketch.CLOSE);
+		this.sketch.pop();
+	}
 }

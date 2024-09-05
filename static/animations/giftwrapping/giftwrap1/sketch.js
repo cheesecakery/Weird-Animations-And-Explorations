@@ -1,209 +1,151 @@
-let NO_OF_SPOTS;
-let spots = [];
+import { Spot } from './spot.js'
+import { Pendulum } from './pendulum.js'
+import { jarvis_march } from '../jarvis.js'
 
-let curr_spot;
+const giftwrap1 = new p5((sketch) => {
+	let shape = [];
 
-let shape = [];
-const G = 1;
+	const G = 1;
+	
+	let headR;
+	let centre;
 
-let r;
-let headR;
-let centre;
+	sketch.setup = () => {
+		sketch.createCanvas(
+			document.getElementById("giftwrap1").offsetWidth, 
+			document.getElementById("giftwrap1").offsetHeight
+		);
 
-let pendulums = [];
+		// Scale head size + 'radius' of convex shape based on width of div.
+		let r = 0.2 * sketch.width;
+		headR = 0.04 * sketch.width; 
 
-let fullShape = false;
+		// Create a central point about 50 units from the left and halfway through the height.
+		centre = sketch.createVector(50 + r, sketch.height / 2);
 
-function setup() {
-  createCanvas(windowWidth, windowWidth);
+		// More likely to have a smaller shape (less spots)
+		let n;
+		if (sketch.random() < 0.7) {
+			n = sketch.floor(sketch.random(5, 10));
+		} else {
+			n = sketch.floor(sketch.random(10, 100));
+		}
 
-  r = 0.2 * width;
-  headR = 0.09 * width;
+		let spots = createSpots(n, r);
+		shape = jarvis_march(sketch, spots);
+	}
 
-  centre = createVector(50 + r, height / 2);
+	function createSpots(n, r) {
+		let spots = [];
+		// Create all the points
+		for (let i = 0; i < n; i++) {
+			// x coordinate is placed anywhere within 'r' distance of centre point 
+			// y coordinate is again placed anywhere within 'r' from centre point 
+			spots.push(new Spot(
+				sketch.random(50, 50 + 2 * r),
+				sketch.random(sketch.height / 2 - r, sketch.height / 2 + r),
+				sketch
+			));
+		}
+		return spots;
+	}
 
-  // more likely to have a smaller shape
-  if (random() < 0.7) {
-    NO_OF_SPOTS = floor(random(5, 10));
-  } else {
-    NO_OF_SPOTS = floor(random(10, 100));
-  }
+	sketch.draw = () => {
+		sketch.background(220);
 
-  // create all points
-  for (let i = 0; i < NO_OF_SPOTS; i++) {
-    let x = random(50, 50 + 2 * r);
-    let y = random(height / 2 - r, height / 2 + r);
+		moveBody();
+		drawLimbs(shape);
+		drawShape(shape);
+	}
 
-    let spot = createVector(x, y);
-    spot.start = random(100);
-    spots.push(spot);
-  }
+	function drawLimbs(shape) {
+		sketch.fill(0);
+		for (let spot of shape) {
+			sketch.ellipse(spot.pos.x, spot.pos.y, 5);
 
-  jarvis_march();
-}
+			// If there is a pendulum, draw & move the pendulum
+			if (spot.pendulum) {
+				spot.pendulum.evaluate();
+				spot.pendulum.move();
+				spot.pendulum.draw();
+			} else if (spot.head) {
+				sketch.noFill();
+				sketch.ellipse(spot.head.x, spot.head.y, headR * 2);
+			}
+		}
+	}
 
-function jarvis_cross(p1, p2, p3) {
-  let v1 = p5.Vector.sub(p2, p1);
-  let v2 = p5.Vector.sub(p2, p3);
+	function drawShape(shape) {
+		sketch.noFill();
+		sketch.stroke(74, 73, 77);
+		sketch.strokeWeight(3);
+		sketch.beginShape();
+		for (let spot of shape) {
+			sketch.vertex(spot.pos.x, spot.pos.y);
+		}
+		sketch.endShape(sketch.CLOSE);
+	}
 
-  let num = v1.dot(v2);
-  let den = v1.mag() * v2.mag();
+	function moveBody() {
+		// Move the body wavily
+		if (sketch.keyIsDown(sketch.RIGHT_ARROW)) {
+			// Move each spot together
+			for (let spot of shape) {
+				spot.moveLeft();
+			}
+		}
+		if (sketch.keyIsDown(sketch.LEFT_ARROW)) {
+			for (let spot of shape) {
+				spot.moveRight();
+			}
+		}
+	}
 
-  let ret_cross = acos(num / den);
+	sketch.mouseClicked = () => {
+		// Check which spot has been touched
+		for (let spot of shape) {
+			let dist = sketch.createVector(sketch.mouseX - spot.pos.x, sketch.mouseY - spot.pos.y);
+			// If mouse touched the spot, toggle each attribute
+			if (dist.mag() < 10) {
+				// If the attribute is a pendulum, switch to a head.
+				if (spot.pendulum) {
+					// Set there to be no pendulum
+					spot.pendulum = undefined;
+					
+					// Create a head 
+					let dir = sketch.createVector(spot.pos.x - centre.x, spot.pos.y - centre.y);
+					// Set magnitude to be the radius of the head
+					dir.setMag(headR);
+					// Set the head to be this coordinate.
+					spot.head = p5.Vector.add(spot.pos, dir);
 
-  // ret_cross = v1.x * v2.y - v1.y * v2.x;
-  return ret_cross;
-}
+				// If it is a head, switch to nothing.
+				} else if (spot.head) {
+					spot.head = null;
+				
+				// If it is nothing, attach a leg to the point
+				} else {
+					// Set angle to be a random one between 0 and PI/3.
+					let angle = sketch.random(sketch.PI / 3);
+			
+					// Pick the two leg lengths randomly
+					let r1 = sketch.random(0.070*sketch.width, 0.1*sketch.width);
+					let r2 = sketch.random(0.1*sketch.width, 0.15*sketch.width);
 
-function jarvis_march() {
-  // sort spots by smallest x
-  spots.sort((a, b) => {
-    return a.x - b.x;
-  });
-  shape.push(spots[0]);
-
-  curr_spot = spots[1];
-
-  // repeat until shape is fully vertexed
-  let i = 0;
-  let curr_prod = jarvis_cross(createVector(0, 0), shape[0], curr_spot);
-  while (curr_spot != shape[0]) {
-    if (i != 0) {
-      shape.push(curr_spot);
-    }
-
-    for (let spot of spots) {
-      let prod = 0;
-      if (i == 0) {
-        if (shape[i] != spot) {
-          prod = 360 - jarvis_cross(createVector(0, 0), shape[0], spot);
-        }
-      } else {
-        if (
-          shape[shape.length - 2] != spot &&
-          shape[shape.length - 1] != spot
-        ) {
-          prod = jarvis_cross(
-            shape[shape.length - 2],
-            shape[shape.length - 1],
-            spot
-          );
-        }
-      }
-
-      if (prod > curr_prod) {
-        curr_prod = prod;
-        curr_spot = spot;
-      }
-    }
-
-    i++;
-    curr_prod = 0;
-  }
-}
-
-function draw() {
-  background(220);
-
-  if (keyIsDown(RIGHT_ARROW)) {
-    for (let spot of shape) {
-      let offx = 2;
-      let offy = sin(frameCount / 10);
-
-      spot.x += offx;
-      spot.y += offy;
-
-      if (spot.head) {
-        spot.head.x += offx;
-        spot.head.y += offy;
-      }
-    }
-  }
-  if (keyIsDown(LEFT_ARROW)) {
-    for (let spot of shape) {
-      let offx = 2;
-      let offy = sin(frameCount / 10);
-
-      spot.x -= offx;
-      spot.y -= offy;
-
-      if (spot.head) {
-        spot.head.x -= offx;
-        spot.head.y -= offy;
-      }
-    }
-  }
-
-  fill(0);
-  for (let spot of shape) {
-    if (spot.pendulum) {
-      ellipse(spot.x, spot.y, 5);
-      spot.pendulum.pos = spot;
-
-      spot.pendulum.evaluate();
-      spot.pendulum.move();
-      spot.pendulum.draw();
-    } else if (spot.head) {
-      noFill();
-      ellipse(spot.head.x, spot.head.y, headR);
-    } else {
-      fill(0);
-      ellipse(spot.x, spot.y, 5);
-    }
-
-    spot.start += 0.01;
-  }
-
-  noFill();
-
-  stroke(74, 73, 77);
-  strokeWeight(3);
-  beginShape();
-  for (let spot of shape) {
-    vertex(spot.x, spot.y);
-  }
-  endShape(CLOSE);
-}
-
-function mouseClicked() {
-  for (let spot of shape) {
-    let dist = createVector(mouseX - spot.x, mouseY - spot.y);
-    if (dist.mag() < 3) {
-      if (spot.pendulum) {
-        spot.pendulum = null;
-
-        let dir = createVector(spot.x - centre.x, spot.y - centre.y);
-        dir.setMag(headR / 2 + 2);
-
-        spot.head = p5.Vector.add(spot, dir);
-      } else if (spot.head) {
-        spot.head = null;
-      } else {
-        // attach a leg to this point.
-        let angle = random(PI / 3);
-
-        let r1 = random(35, 50);
-        let r2 = random(50, 75);
-
-        let pendulum = new Pendulum(
-          spot.x,
-          spot.y,
-          10,
-          10,
-          r1,
-          r2,
-          angle,
-          -angle
-        );
-
-        spot.pendulum = pendulum;
-      }
-    }
-  }
-}
-
-function keyPressed() {
-  if (keyCode == 83) {
-    saveGif("hunchback", 5);
-  }
-}
+					// Create the new pendulum with these attributes
+					spot.pendulum = new Pendulum(
+						spot.pos,
+						10,
+						10,
+						r1,
+						r2,
+						angle,
+						-angle,
+						G,
+						sketch
+					);
+				}
+			}
+		}
+	}
+}, 'giftwrap1');

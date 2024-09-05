@@ -2,18 +2,21 @@ let NO_OF_ROTATORS = 900;
 let rotators = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let parent = document.getElementById("circles");
+  let canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
+  canvas.parent(parent);
+
   background(0);
   
-  let minSide = min([windowWidth, windowHeight]);
-  let scale = 0.5 * minSide;
+  let minSide = min(width, height);
+  let scaleR = 0.5 * minSide;
   let l = 0.1 * minSide
 
   for (let i = 0; i < NO_OF_ROTATORS; i++) {
     let st_angle = 0.1 * (i + 1)
     
     // Set inner radius of circle
-    let r = scale * (cos(1/100 * st_angle));
+    let r = scaleR * (cos(1/100 * st_angle));
 
     // spawn in a circle
     let pos = createVector(0, r);

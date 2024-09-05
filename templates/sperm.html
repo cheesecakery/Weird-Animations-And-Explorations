@@ -3,6 +3,10 @@
 
 {% set color = ('#0b0e14', '#14171f') %}
 
+{% set scripts = [['egg', 'rotator', 'sperm', 'spiral', 'wave', 'sketch'],
+['sketch', 'wave']]
+ %} 
+
 {% block head %}
 <style>
   .header, .offcanvas-header, .offcanvas-body {
@@ -24,8 +28,12 @@
 {% endblock %}
 
 {% block body %}
-<iframe src = "/static/animations/sperm/index.html", id="sperm", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
-<iframe src = "/static/animations/sperm3/index.html", class="phone-content", name="sperm", title="sperm", frameborder="0", scrolling="no"></iframe>
+  <div id="sperm" name="sperm">
+      <script src="/static/animations/sperm/sketch.js" type="module"></script>
+  </div>
+  <div id="sperm3" name="sperm">
+      <script src="/static/animations/sperm3/sketch.js" type="module"></script>
+  </div>
 {% endblock %}
 
 {% block offcanvasheader %} the sperm game {% endblock %}

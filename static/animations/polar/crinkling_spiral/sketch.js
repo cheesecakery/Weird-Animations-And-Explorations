@@ -2,7 +2,9 @@ let NO_OF_ROTATORS = 1500;
 let rotators = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let parent = document.getElementById("crinkling_spiral");
+  let canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
+  canvas.parent(parent);
   background(0);
   
   let minSide = min(width, height);

@@ -1,53 +1,50 @@
-function randColour(min, max) {
-  var r;
-  var g;
-  var b;
-
-  var rgb = [r, g, b];
-  for (let i = 0; i < rgb.length; i++) {
-    rgb[i] = floor(random(min, max));
+// Makes a random colour.
+export function randomColour(sketch) {
+  let rgb = [];
+  for (let i = 0; i < 3; i++) {
+    rgb.push(sketch.floor(sketch.random(255)));
   }
 
   return rgb;
 }
 
-function midpointColour(colour1, colour2) {
-  let colour3 = [];
-  
-  for (let i = 0; i < colour1.length; i++) {
-    let midpoint = (colour1[i] + colour2[i]) / 2;
-    colour3.push(midpoint);
+// Generates the midpoint colour of two colours.
+export function midpointColour(colA, colB) {
+  let colour = [];
+      
+  for (let i = 0; i < colA.length; i++) {
+      colour.push((colA[i] + colB[i]) / 2);
   }
-  
-  return colour3;
+      
+  return colour;
 }
 
-function createText(text, colour, time) {
-  let div = createDiv(text);
+// Creates text on bottom of the screen.
+export function createText(text, colour, seconds, sketch) {
+  // Make a div and add correct styling attributes
+  let div = sketch.createDiv(text);
   
-  div.style("font-size", '12px');
+  div.style("font-size", '15px');
   div.style("color", colour);
 
   div.style("font-weight", "bold");
   div.style("font-family", "verdana");
-  
-  let x = 10;
-  let y = height + 10;
 
-  if (divs.length > 0) {
-    y = divs[divs.length - 1].y + divs[divs.length - 1].height;
-    
+  let y = document.getElementById("attractor").offsetTop + sketch.height + 10;
+
+  // Check where it should lie on the screen
+  if (sketch.divs.length > 0) {
+    y = sketch.divs[sketch.divs.length - 1].y + sketch.divs[sketch.divs.length - 1].height;
   }
 
-  div.position(x, y);
-  
-  divs.push(div);
+  // Position it at this point.
+  div.position(10, y);
+  sketch.divs.push(div);
 
-  // After 'time' seconds remove text 
+  // After allotted time, remove text.
   setTimeout(() => {
-    let i = divs.indexOf(div);
-    
-    divs.splice(i, 1);
+    let i = sketch.divs.indexOf(div);
+    sketch.divs.splice(i, 1);
     div.remove();
-  }, time * 1000);
+  }, seconds * 1000);
 }

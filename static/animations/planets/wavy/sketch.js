@@ -1,128 +1,121 @@
-const NO_OF_WAVES = 5;
-let waves = [];
+import { Planet } from './planet.js'
+import { Wave } from './wave.js'
 
-const NO_OF_PLANETS = 3;
-let planets = [];
+const wavy = new p5((sketch) => {
+	const nWaves = 5;
+	sketch.waves = [];
 
-let ruby;
-let blue;
-let grassy;
-let opal;
-let earth;
-let meteor;
+	const nPlanets = 3;
+	let planets = [];
+	let planetImgs;
 
-let nightsky;
+	let night;
 
-let maskImage;
+	let parent_id = "wavy";
+	let parent;
+	sketch.animate = false;
 
-let max_d;
+	sketch.preload = () => {
+		let root = "/static/animations/planets/images/"
+		night = sketch.loadImage(root+"night.jpg");
+    	sketch.shading = sketch.loadImage(root+"shading.png");
+    	let blue = sketch.loadImage(root+"blue_planet_no_shade.png");
+		let grassy = sketch.loadImage(root+"grassy_planet_no_shade.png");
+    	let magnet = sketch.loadImage(root+"magnet_planet_no_shade.png");
+	  
+		planetImgs = [magnet, grassy, blue];
+	}
+	
+	sketch.setup = () => {
+		sketch.createCanvas(0, 0);
+	}
 
-let images;
-function preload() {
-  nightsky = loadImage("../images/night.jpg");
+	document.getElementById("planets").addEventListener('slid.bs.carousel', function(event) {
+		let planet_id = event.target.querySelector('.active').id;
+		if (planet_id == parent_id) {
+			setupSketch();
+			sketch.animate = true; 
+		} else {
+			sketch.animate = false;
+		}
+	});
 
-  blue = loadImage("../images/blue_planet_no_shade.png");
-  grassy = loadImage("../images/grassy_planet_no_shade.png");
-  magnet = loadImage("../images/magnet_planet_no_shade.png");
-  maskImage = loadImage("../images/shading.png");
+	function setupSketch() {
+		if (!sketch.animate) {
+			parent = document.getElementById(parent_id);
+			sketch.createCanvas(
+				parent.offsetWidth,
+				parent.offsetHeight,
+			);
+	
+			// Sets the maximum distance a mouse could be from a planet
+			sketch.maxD = sketch.pow(sketch.dist(0, 0, sketch.width, sketch.height), 1.8);
+	
+			createWaves();
+			createPlanets();
+	
+			drawNight();
+		}
+	}
 
-  images = [magnet, grassy, blue];
-}
+	sketch.draw = () => {
+		if (sketch.animate) {
+			drawNight();
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background(0);
+			// update the position of the wave
+			for (let wave of sketch.waves) {
+				wave.update();
+			}
+	
+			// draw the sun cursor
+			sketch.fill(255, 200, 0);
+			sketch.ellipse(sketch.mouseX, sketch.mouseY, 20);
+	
+			for (let planet of planets) {
+				planet.move();
+				planet.draw();
+			}
+		}
+	}
 
-  image(nightsky, 0, 0, width, height);
-  
-  max_d = dist(0, 0, width, height);
-  max_d *= max_d;
+  	function createWaves() {
+		for (let i = 0; i < nWaves; i++) {
+			sketch.waves.push(new Wave(
+				sketch.random(50, 400),	
+				sketch.random(20, 40),
+				sketch.random(100),
+				sketch
+			));
+		}
+  	}
 
-  for (let i = 0; i < NO_OF_WAVES; i++) {
-    let wave = new Wave(random(50, 400), random(20, 40), random(100));
-    waves.push(wave);
-  }
+  	function createPlanets() {
+		let step = sketch.width / nPlanets;
 
-  // planets ?
-  let step = width / NO_OF_PLANETS;
+		// Create all the planets with properties: radius, x coordinate and image.
+		for (let i = 0; i < nPlanets; i++) {
+			planets.push(new Planet(
+				step * (i + 0.5),
+				sketch.pow(i + 1, 1.1) * step * 0.05,  
+				planetImgs[i % planetImgs.length], 
+				sketch
+			))
+		}
+  	}
 
-  for (let i = 0; i < NO_OF_PLANETS; i++) {
-    let r = (pow(i, 1.1) + 1) * step * 0.05;
-
-    let x = step * (i + 0.5);
-
-    let img = images[i % images.length];
-
-    let planet = new Planet(x, r, img);
-    planets.push(planet);
-  }
-  
-  planets[0].tint = 1.5;
-}
-
-function draw() {
-  background(0, 0.3);
-
-  image(
-    nightsky,
-    0,
-    0,
-    width,
-    height,
-    0,
-    0,
-    nightsky.width,
-    nightsky.height,
-    COVER
-  );
-
-  for (let wave of waves) {
-    wave.update();
-  }
-  
-  fill(255, 0, 0);
-  ellipse(mouseX, mouseY, 20)
-
-  push();
-  imageMode(CENTER);
-
-  for (let planet of planets) {
-    let x = planet.x;
-    let y = height / 2;
-    for (let wave of waves) {
-      y += wave.evaluate(x);
-    }
-
-    let d = createVector(x - mouseX, y - mouseY);
-
-    let m = map(d.magSq(), 0, max_d, 100, 10);
-    // m = constrain(m, 50, 150);
-    let a = atan2(d.x, d.y);
-
-    push();
-    translate(x, y);
-
-    push();
-    // PI/3 is as the mask is off centre
-    rotate(-a + PI / 3);
-    image(maskImage, 0, 0, planet.r * 2, planet.r * 2);
-    pop();
-
-    push();
-    blendMode(BURN);
-    image(planet.img, 0, 0, planet.r * 2, planet.r * 2);
-    blendMode(BLEND);
-    tint(255, m * planet.tint);
-    image(planet.img, 0, 0, planet.r * 2, planet.r * 2);
-
-    pop();
-
-    pop();
-  }
-
-  pop();
-}
-
-function doubleClicked() {
-  saveGif("bouncing", 5)
-}
+	function drawNight() {
+		// Draw night sky
+		sketch.image(
+			night,
+			0,
+			0,
+			sketch.width,
+			sketch.height,
+			0,
+			0,
+			night.width,
+			night.height,
+			sketch.COVER
+		);
+	}
+}, 'wavy');

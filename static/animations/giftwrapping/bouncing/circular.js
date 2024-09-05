@@ -1,6 +1,8 @@
-class Circular extends Particle {
-    constructor(x, y, m) {
-        super(x, y, m);
+import { Particle } from '../particle.js'
+
+export class Circular extends Particle {
+    constructor(x, y, m, size, sketch) {
+        super(x, y, m, size, sketch);
     }
 
     move() {
@@ -10,8 +12,9 @@ class Circular extends Particle {
 
     friction() {
         // Check if they are on floor
-        let dif = height - (this.pos.y + this.r);
+        let dif = this.sketch.height - (this.pos.y + this.r);
         if (dif < 1) {
+
           // Apply friction !!
     
           // Formula: -1 * mu * N * vel

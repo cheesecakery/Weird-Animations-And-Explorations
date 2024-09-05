@@ -1,151 +1,155 @@
-const NO_OF_PLANETS = 17;
+import { Planet } from '../planet.js'
+import { Sun } from '../sun.js'
 
-let planets = [];
+const gagnam_style = new p5((sketch) => {
 
-const G = 1;
-const SIZE = 3;
+	const N = 17;
 
-let sun;
-let sun_img;
-let night;
+	let sun;
+	let night;
 
-let total_imgs = [];
-let imgs;
+	let planets = [];
+	let planetImgs = [];
 
-let shading;
+	sketch.SIZE = 3;
+	sketch.G = 1;
 
-let img_names = ['blue_planet', 'grassy',
-  'earth_planet', 'meteor', 'black_planet', 'crystal_planet',
-  'desert_planet', 'green_planet', 'magnet_planet', 'moon_planet', 
-  'purple_planet', 'red_planet', 'turq_planet', 'wood_planet'
-]
+	let parent_id = "gagnam_style"
+	let parent;
+	sketch.animate = false;
 
-function preload() {
-  night = loadImage("../images/night.jpg");
-  sun_img = loadImage("../images/the_sun.png");
-  shading = loadImage("../images/shading.png");
+	let img_names = ['blue_planet', 'grassy',
+	'earth_planet', 'meteor', 'black_planet', 'crystal_planet',
+	'desert_planet', 'green_planet', 'magnet_planet', 'moon_planet', 
+	'purple_planet', 'red_planet', 'turq_planet', 'wood_planet'
+	]
 
-  for (let img_name of img_names) {
-    let img = loadImage("../images/" + img_name + ".png");
-    total_imgs.push(img);
-  }
+	sketch.preload = () => {
+		let root = "/static/animations/planets/images/"
+		night = sketch.loadImage(root+"night.jpg");
+		sketch.sunImg = sketch.loadImage(root+"sun2.png");
+		sketch.shading = sketch.loadImage(root+"shading.png");
+		
+		for (let img_name of img_names) {
+			let img = sketch.loadImage(root + img_name + ".png");
+			planetImgs.push(img);
+		}
+	}
 
-  imgs = randomSubArray(total_imgs, NO_OF_PLANETS);
-}
+	document.getElementById("planets").addEventListener('slid.bs.carousel', function(event) {
+		let planet_id = event.target.querySelector('.active').id;
+		if (planet_id == parent_id) {
+			setupSketch();
+			sketch.animate = true; 
+		} else {
+			sketch.animate = false;
+		}
+	});
 
-function setup() {
-  frameRate(60);
-  let minSide = min(windowWidth, windowHeight);
-  createCanvas(windowWidth, windowHeight);
-  strokeWeight(2);
+	
+	sketch.setup = () => {
+		sketch.createCanvas(0, 0);
+	}
 
-  image(
-    night,
-    0,
-    0,
-    width,
-    height,
-    0,
-    0,
-    night.width,
-    night.height,
-    COVER
-  );
+	function setupSketch() {
+		if (!sketch.animate) {
+			planets = [];
+			parent = document.getElementById(parent_id);
+			sketch.resizeCanvas(
+				parent.offsetWidth,
+				parent.offsetHeight,
+			);
+			let scale = sketch.min(sketch.width, sketch.height);
+	
+			sun = new Sun(0, 0, 5*scale, sketch);
+	
+			createPlanets(scale);
+	
+			drawNight();
+		}
+	}
 
-  let m = 1.5 * minSide;
-  sun = new Sun(0, 0, m);
-  
-  let mlt = 1.5 / NO_OF_PLANETS;
-  
-  let pos1 = p5.Vector.random2D();
-  let step = TWO_PI / NO_OF_PLANETS;
-  
-  for (let i = 0; i < NO_OF_PLANETS; i++) {
-    // let m = mlt * random(100, 150) * (i + 1);
-    let m = 0.07 * minSide * random(0.9, 1.1);
-    let img = imgs[i % imgs.length];
+	sketch.draw = () => {
+		if (sketch.animate) {
+			drawNight();
 
-    let pos = p5.Vector.rotate(pos1, step * i);
-    pos.mult(400);
+			// Move planets
+			for (let planet of planets) {
+				sun.attract(planet);
+				sun.touches(planet);
+				planet.move();
+			}
+	
+			// Calculate which will be drawn above, which below
+			let planets3D = aboveOrBelow(planets);
+			
+			sketch.push();
+				sketch.imageMode(sketch.CENTER);
+				sketch.translate(sketch.width / 2, sketch.height / 2);
+				// Display planets & sun in the middle
+				for (let planet of planets3D['planetsBelow']) {
+					planet.display();
+				}
+			
+				sun.draw();
+			
+				for (let planet of planets3D['planetsAbove']) {
+					planet.display();
+				}
+			sketch.pop();
+		}
+	}
 
-    let planet = new Planet(pos.x, pos.y, m, img, 0, 10);
-    planets.push(planet);
-    
-    let r = random([true, false]);
-    planet.prevAbove = r;
-  }
-}
+	function createPlanets(scale) {
+		let startPos = p5.Vector.random2D();
+		let step = sketch.TWO_PI / N;
+		
+		for (let i = 0; i < N; i++) {
+			let pos = p5.Vector.rotate(startPos, step * i);
+			pos.mult(sketch.width / 4);
 
-function draw() {
-  image(
-    night,
-    0,
-    0,
-    width,
-    height,
-    0,
-    0,
-    night.width,
-    night.height,
-    COVER
-  );
-  
-  // Calculate which will be drawn above, which below
-  let planets_above = [];
-  let planets_below = [];
-  for (let planet of planets) {
-    if (planet.touchingSun && planet.prevAbove) {
-      planets_below.push(planet);
-    } else {
-      planets_above.push(planet);
-    }
-  }
+			let planet = new Planet(
+				pos.x,
+				pos.y,
+				0.07 * scale * sketch.pow(i + 1, 0.3) * sketch.random(0.9, 1.1),
+				planetImgs[i % planetImgs.length],
+				0,
+				10,
+				sketch
+			);
 
-  push();
-  imageMode(CENTER);
-  translate(width / 2, height / 2);
-  
-  // DISPLAY OF PLANETS
-  for (let planet of planets_below) {
-    planet.display();
-  }
+			planet.prevAbove = sketch.random([true, false]);
+			planets.push(planet);
+		}
+	}
 
-  sun.draw();
+	function aboveOrBelow(planets) {
+		let planets3D = {'planetsAbove': [], 'planetsBelow': []};
 
-  for (let planet of planets_above) {
-    planet.display();
-  }
+		for (let planet of planets) {
+			if (planet.touchingSun && planet.prevAbove) {
+				planets3D['planetsAbove'].push(planet);
+			} else {
+				planets3D['planetsBelow'].push(planet);
+			}
+		}
 
-  // MOVEMENT OF PLANETS
-  for (let planet of planets_below) {
-    sun.attract(planet);
-    sun.touches(planet);
+		return planets3D;
+	}
 
-    planet.move();
-  }
-
-  for (let planet of planets_above) {
-    sun.attract(planet);
-    sun.touches(planet);
-
-    planet.move();
-  }
-
-  pop();
-}
-
-function randomSubArray(array, n) {  
-  // Remove 1 element
-  for (let i = 0; i < array.length - n; i++) {
-    let r = floor(random(array.length));
-    array.splice(r, 1);
-  }
-  
-  return array;
-}
-
-function keyPressed() {
-  if (keyCode == 83) {
-    saveGif("moving", 10);
-  }
-}
+	function drawNight() {
+		// Draw night sky
+		sketch.image(
+			night,
+			0,
+			0,
+			sketch.width,
+			sketch.height,
+			0,
+			0,
+			night.width,
+			night.height,
+			sketch.COVER
+		);
+	}
+}, 'gagnam_style');

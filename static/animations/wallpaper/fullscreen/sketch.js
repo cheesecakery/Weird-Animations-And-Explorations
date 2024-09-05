@@ -12,8 +12,9 @@ let scaleFactor;
 
 
 function setup() {
-  let minSide = min(windowWidth, windowHeight);
-  canvas = createCanvas(minSide, minSide);
+  let parent = document.getElementById("fullscreen");
+  let canvas = createCanvas(parent.offsetHeight, parent.offsetHeight);
+  canvas.parent(parent);
 
   background(255);
   drawPicture();

@@ -1,61 +1,52 @@
-class Spiral {
-  constructor(x, y, r, l, n, v) {
-    this.pos = createVector(x, y);
-    this.vel = createVector(0, 0);
-    this.acc = createVector(0, 0);
-    
-    this.r = r;
-    this.l = l;
-    
-    this.v = v;
-    
-    this.n = n;
-    this.rotators = [];
-    
-    this.range = 50;
-    this.col = random(this.range, 360 - this.range);
+import { Rotator } from './rotator.js'
 
-    this.createRotators();
-  }
+export class Spiral {
+	constructor(x, y, r, l, n, v, sketch) {
+		this.sketch = sketch;
 
-  createRotators() {
-    for (let i = 0; i < this.n; i++) {
-      let st_angle = 0.1 * (i + 1);
+		this.pos = sketch.createVector(x, y);
+		
+		this.r = r;
+		this.l = l;
+		this.v = v;
+		
+		this.n = n;
+		this.rotators = [];
+		
+		this.hueRange = 50;
+		this.hue = sketch.random(this.hueRange, 360 - this.hueRange);
 
-      // Set inner radius of circle
-      let r = this.r;
+		this.createRotators();
+	}
 
-      // spawn in a circle
-      let pos = createVector(0, r);
-      push();
-      translate(width / 2, height / 2);
-      pos.rotate(st_angle);
-      pop();
+	createRotators() {
+		for (let i = 0; i < this.n; i++) {
+			// Spawn in a circle
+			let pos = this.sketch.createVector(0, this.r);
+			this.sketch.push();
+				this.sketch.translate(this.sketch.width / 2, this.sketch.height / 2);
+				pos.rotate(0.1 * (i + 1));
+			this.sketch.pop();
 
-      // length of each line
-      let angle = pos.heading();
-
-      let strt = 0;
-
-      let rotator = new Rotator(pos.x, pos.y, this.l, angle, strt, this.vel, this.col, this.range);
-      this.rotators.push(rotator);
-    }
-  }
-  
-  move() {
-    this.vel.add(this.acc);
-    this.pos.add(this.vel);
-    
-    this.acc.set(0, 0);
-  }
-  
-  draw() {
-    push();
-    translate(this.pos.x, this.pos.y);
-    for (let rotator of this.rotators) {
-      rotator.move();
-      rotator.draw();
-    }
-    pop();
-  }
+			// Add to rotators
+			this.rotators.push( new Rotator(
+				pos,
+				this.l,
+				pos.heading(),
+				this.hue,
+				this.hueRange,
+				this.sketch
+			));
+		}
+	}
+	
+	draw() {
+		this.sketch.push();
+			this.sketch.translate(this.pos.x, this.pos.y);
+			for (let rotator of this.rotators) {
+				rotator.move();
+				rotator.draw();
+			}
+		this.sketch.pop();
+	}
 }

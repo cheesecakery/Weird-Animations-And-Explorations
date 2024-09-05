@@ -1,4 +1,4 @@
-class Flower {
+class Circle {
   constructor(x, y, v, r, pace) {
     this.pos = createVector(x, y);
     this.v = v;

@@ -2,7 +2,10 @@ let NO_OF_FLOWERS = 3;
 let flowers = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let parent = document.getElementById("peachy");
+  let canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
+  canvas.parent(parent);
+
   let minSide = min(width, height);
   
   let step = 2 * PI / NO_OF_FLOWERS;

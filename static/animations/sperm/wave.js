@@ -1,15 +1,17 @@
-class Wave {
-  constructor(period, amplitude, phase) {
-    this.period = period;
-    this.amplitude = amplitude;
-    this.phase = phase;
-  }
+export class Wave {
+	constructor(period, amplitude, phase, sketch) {
+		this.period = period;
+		this.amplitude = amplitude;
+		this.phase = phase;
 
-  evaluate(x) {
-    return this.amplitude * sin((TWO_PI * x) / this.period + this.phase);
-  }
+		this.sketch = sketch;
+	}
 
-  update() {
-    this.phase += 0.05;
-  }
+	evaluate(x) {
+		return this.amplitude * this.sketch.sin((this.sketch.TWO_PI * x) / this.period + this.phase);
+	}
+
+	update() {
+		this.phase += 0.05;
+	}
 }

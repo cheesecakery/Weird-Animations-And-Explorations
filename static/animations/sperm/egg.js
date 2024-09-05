@@ -1,79 +1,65 @@
-class Egg {
-  constructor(x, y, m) {
-    this.pos = createVector(x, y);
-    this.m = m;
-    this.r = sqrt(m) * 10;
+export class Egg {
+	constructor(x, y, m, sketch) {
+		this.sketch = sketch;
 
-    this.angle = 0;
-    this.inc = 1;
+		this.pos = sketch.createVector(x, y);
+		this.m = m;
+		this.r = sketch.sqrt(m) * 10;
 
-    this.th = 0.2;
+		this.angle = 0;
+		this.inc = 1;
 
-    this.cracked = false;
-  }
+		this.border = 0.2;
+	}
 
-  contain(sperm) {
-    let dist = p5.Vector.sub(this.pos, sperm.pos);
+	// Find if egg contains sperm
+	contain(sperm) {
+		// Check that distance between the two is smaller than radius of the egg
+		let dist = p5.Vector.sub(this.pos, sperm.pos);
+		if (dist.mag() - sperm.r <= this.r) {
+			return true;
+		}
+		return false;
+	}
 
-    if (dist.mag() - sperm.r <= this.r) {
-      return true;
-    }
-    return false;
-  }
+	crack() {
+		// Draw border super thin
+		this.border = 0.1;
+		// Reset increment
+		this.inc = 1;
 
-  // Exerts force to attract bubble
-  attract(sperm) {
-    // Find distance between the two
-    let force = p5.Vector.sub(this.pos, sperm.pos);
+		// Let last moving sperm travels to centre of the egg.
+		setTimeout(() => {
+			sperm.inEgg = true;
+		}, 2500);
+	}
 
-    let min = 200;
-    let max = 2000;
+	draw() {
+		// Set attributes
+		this.sketch.stroke(360, 0.5);
+		this.sketch.strokeWeight(this.border);
+		this.sketch.noFill();
 
-    let distanceSq = constrain(force.magSq(), min, max);
+		// Determines how many points the circle has (how 'broken' the shape is)
+		let inc = this.sketch.random(0.01, this.inc);
 
-    let G = attraction;
+		this.sketch.push();
+			this.sketch.translate(this.pos.x, this.pos.y);
+			// Rotate the circle by a random angle (makes it look more visceral)
+			this.sketch.rotate(this.sketch.map(this.sketch.noise(this.angle), 0, 1, -5, 5));
+			this.sketch.beginShape();
+			// Make a circular shape 
+			for (let a = 0; a < this.sketch.TWO_PI; a += inc) {
+				let r1 = this.r;
+				let x = r1 * this.sketch.cos(a);
+				let y = r1 * this.sketch.sin(a);
 
-    let constant = (G * (this.m * sperm.m)) / distanceSq;
+				this.sketch.vertex(x, y);
+			}
+			this.sketch.endShape(this.sketch.CLOSE);
+		this.sketch.pop();
 
-    force.setMag(constant);
-
-    sperm.applyForce(force);
-  }
-
-  crack() {
-    this.th = 0.1;
-    this.inc = 1;
-
-    // Picks a random sperm
-    setTimeout(() => {
-      sperm.moving = true;
-      sperm.inEgg = true;
-    }, 2500);
-  }
-
-  draw() {
-    stroke(255, 50);
-    noFill(0);
-
-    strokeWeight(this.th);
-
-    let inc = random(0.01, this.inc);
-
-    push();
-    translate(this.pos.x, this.pos.y);
-    rotate(map(noise(this.angle), 0, 1, -5, 5));
-    beginShape();
-    for (let a = 0; a < TWO_PI; a += inc) {
-      let r1 = this.r;
-
-      let x = r1 * cos(a);
-      let y = r1 * sin(a);
-
-      vertex(x, y);
-    }
-    endShape(CLOSE);
-    pop();
-
-    this.angle += 0.01;
-  }
+		// Keeps rotation going
+		this.angle += 0.01;
+	}
 }

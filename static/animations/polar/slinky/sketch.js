@@ -2,7 +2,10 @@ let NO_OF_FLOWERS = 30;
 let flowers = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let parent = document.getElementById("slinky");
+  let canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
+  canvas.parent(parent);
+
   let minSide = min(width, height);
   let r = minSide * 0.4;
   

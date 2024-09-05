@@ -1,21 +1,22 @@
 {% extends "layout.html" %}
 {% set active_page = "attractor" %}
 
+{% set scripts = ['attractor', 'bubble', 'helper', 'jelly', 'mating_funcs', 'movement_funcs', 'sketch'] %}
+
+{% block body %}
+    <div id="attractor" name="attractor">
+        <script src="/static/animations/attractor/sketch.js" type="module"></script>
+    </div>
+{% endblock %}
+
 {% block offcanvasheader %}the attractor game{% endblock %}
 {% block offcanvastext %}
     <div class="offcanvas-info">
-        <h4 class="offcanvas-mini-title">how to play
-        </h4>
+        <h4 class="offcanvas-mini-title">how to play</h4>
         <ul>
             <li>click on the eye of an attractor (the black dot) to start movement</li>
             <li>use arrows to navigate</li>
             <li>when two attractors get in the slime pit, they mate</li>
         </ul>
     </div>
-{% endblock %}
-
-{% block body %}
-
-<iframe src = "/static/animations/attractor/index.html", id="attractor", name="attractor", title="attractor", frameborder="0", scrolling="no"></iframe>
-
 {% endblock %}

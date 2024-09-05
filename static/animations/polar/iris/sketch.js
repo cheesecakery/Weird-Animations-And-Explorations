@@ -1,8 +1,10 @@
 let NO_OF_FLOWERS = 10;
-let flowers = [];
+let circles = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let parent = document.getElementById("iris");
+  let canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
+  canvas.parent(parent);
 
   let r = 0.1 * min(width, height);
   
@@ -14,16 +16,16 @@ function setup() {
     
     let pace = random(2, 5);
     
-    let flower = new Flower(x, y, v, r, pace);
-    flowers.push(flower);
+    let circle = new Circle(x, y, v, r, pace);
+    circles.push(circle);
   }
 }
 
 function draw() {
   background(0);
   
-  for (let flower of flowers) {
-    flower.draw();
+  for (let circle of circles) {
+    circle.draw();
   }
 }
 

@@ -1,202 +1,153 @@
-// scale of mass to radius
-const SIZE = 1.5;
+import { Attractor } from './attractor.js'
+import { Jelly } from './jelly.js'
+import { createText } from './helper.js'
 
-// Controls how far attractors can generate from sides
-let d;
-let r;
-let mass;
-let minSide;
+const attractor = new p5((sketch) => {
+    const NO_OF_ATTRACTORS = 3;
+    sketch.attractors = [];
+    sketch.G = 10;
 
-let jelly;
+    let movingAttractor;
+    sketch.submergedAdultAttractors = [];
+    sketch.submergedChildrenAttractors = [];
 
-const NO_OF_ATTRACTORS = 3;
-const MAX_NO_OF_ATTRACTORS = 5;
-let attractors = [];
+    sketch.matingInProgress = false;
 
-let submerged_attractors = [];
-let submerged_children = [];
+    sketch.divs = [];
 
-let attractor_move = false;
-let attractor_cursor;
+    sketch.setup = () => {
+        // Creates canvas size of the div
+        sketch.createCanvas(
+            document.getElementById("attractor").offsetWidth, 
+            document.getElementById("attractor").offsetHeight - 100
+        );
+        // Make background a grey-ish colour
+        sketch.background(220);
 
-let matingInProgress = false;
+        // Scale animation based on div size
+        // TODO!! - figure out scaling ???
+        let scale = sketch.min(sketch.width, sketch.height);
+        let d = scale * 0.4;
 
-let divs = [];
+        // create the sketch.jelly!
+        sketch.jelly = new Jelly(
+            sketch.random(0, sketch.width - d), 
+            sketch.random(sketch.height/2, sketch.height - d),
+            d,
+            d,
+            5,
+            sketch
+        );
 
-function setup() {
-  createCanvas(windowWidth, windowHeight - 100);
-  minSide = min(width, height);
-  r = minSide * 0.4; 
-  d = minSide * 0.1;
-  mass = minSide * 0.5;
-
-  jelly = new Jelly(width / 2, height / 2, 200, 200, 5);
-
-  for (let i = 0; i < NO_OF_ATTRACTORS; i++) {
-    createAttractor();
-  }
-}
-
-// Creates an attractor
-function createAttractor() {
-  let x = random(d, width - d);
-  let y = random(d, height / 2);
-
-  let mass = 10;
-  let no_of_bubbles = floor(random(50, 100));
-
-  let attractor = new Attractor(x, y, mass, no_of_bubbles);
-  attractors.push(attractor);
-}
-
-function draw() {
-  background(220);
-
-  // Move attractor
-  let ra = 1;
-  let dif = 0.5;
-  if (attractor_move) {
-    if (keyIsDown(LEFT_ARROW)) {
-      attractor_cursor.pos.x -= ra;
-      for (let bubble of attractor_cursor.bubbles) {
-        bubble.pos.x -= random(ra - dif, ra + dif);
-      }
+        createAttractors(scale, d);
     }
-    if (keyIsDown(RIGHT_ARROW)) {
-      attractor_cursor.pos.x += ra;
-      for (let bubble of attractor_cursor.bubbles) {
-        bubble.pos.x += random(ra - dif, ra + dif);
-      }
-    }
-    if (keyIsDown(UP_ARROW)) {
-      attractor_cursor.pos.y -= ra;
-      for (let bubble of attractor_cursor.bubbles) {
-        bubble.pos.y -= random(ra - dif, ra + dif);
-      }
-    }
-    if (keyIsDown(DOWN_ARROW)) {
-      attractor_cursor.pos.y += 1;
-      for (let bubble of attractor_cursor.bubbles) {
-        bubble.pos.y += random(ra - dif, ra + dif);
-      }
-    }
-  }
 
-  for (let attractor of attractors) {
-    let touching_bubbles = 0;
-    let submerged_bubbles = 0;
+    sketch.draw = () => {
+        // resets background
+        sketch.background(220);
 
-    // If bubbles are drenched in jelly, slow their motion.
-    for (let bubble of attractor.bubbles) {
-      if (jelly.contains(bubble)) {
-        touching_bubbles++;
+        moveAttractor();
+        interactWithJelly();
 
-        if (jelly.wholly_contains(bubble)) {
-          submerged_bubbles++;
+        // Move & draw attractors and sketch.jelly
+        for (let attractor of sketch.attractors) {
+            attractor.edges();
+            attractor.move();
+            attractor.draw();
         }
 
-        let drag = jelly.calculateDrag(bubble.vel);
-        bubble.applyForce(drag);
-      }
+        sketch.jelly.draw();
     }
 
-    // If the attractor is fully submerged in the pit:
-    if (submerged_bubbles == attractor.no_of_bubbles) {
-      // Check if adult
-      if (attractor.adult) {
-        // Add to array (if necessary) & show text
-        if (!submerged_attractors.includes(attractor)) {
-          submerged_attractors.push(attractor);
+    function interactWithJelly() {
+        // Check each attractors current position in relation to the sketch.jelly.
+        for (let attractor of sketch.attractors) {
+            // Check whether attractors are submerged
+            let somewhatSubmergedParticles = attractor.somewhatSubmergedParticles();
+            let whollySubmergedParticles = attractor.whollySubmergedParticles();
 
-          // Creates text saying how many attractors are submerged
-          let col = color(attractor.rgb);
-          if (submerged_attractors.length == 1) {
-            createText("1 attractor is submerged", col, 1.5);
-          } else {
-            createText(
-              submerged_attractors.length + " attractors are submerged",
-              col,
-              1.5
-            );
-          }
-
-          setTimeout(checkToBeginMating, 5000);
-        }
-        // If child, add to separate array (so don't mess with mating)
-      } else {
-        if (!submerged_children.includes(attractor)) {
-          submerged_children.push(attractor);
-
-          let col = color(attractor.rgb);
-          if (!matingInProgress) {
-            if (submerged_children.length == 1) {
-              createText("1 child is submerged", col, 1.5);
-            } else {
-              createText(
-                submerged_children.length + "children are submerged",
-                col,
-                1.5
-              );
+            // Checks whether to submerge/unsubmerge attractors
+            if (whollySubmergedParticles == attractor.particles.length && (!sketch.submergedAdultAttractors.includes(attractor) && !sketch.submergedChildrenAttractors.includes(attractor))) {
+                sketch.jelly.submergeAttractor(attractor);
+            } else if (somewhatSubmergedParticles < attractor.particles.length && (sketch.submergedAdultAttractors.includes(attractor) || sketch.submergedChildrenAttractors.includes(attractor))) {
+                sketch.jelly.unsubmergeAttractor(attractor);
             }
+
+            // If mating, keep those mating within the sketch.jelly, and others outside
+            if (sketch.matingInProgress) {
+                if (attractor.mating || attractor.justBorn) {
+                    sketch.jelly.enclose(attractor);
+                } else {
+                    sketch.jelly.keepOut(attractor);
+                }
+            }
+        }
+    }
+
+    sketch.mouseClicked = () => {
+        // Checks whether attractor is selected
+        for (let attractor of sketch.attractors) {
+            if (attractor != movingAttractor) {
+                if (attractor.contains(sketch.mouseX, sketch.mouseY)) {
+                  movingAttractor = attractor;
+
+                  let col = sketch.color(attractor.rgb);
+                  createText("attractor is on the go", col, 1.5, sketch);
+                }
+            }
+        }
+    }
+
+    function createAttractors(scale, d) {
+      let m = scale * 0.005;
+
+        for (let i = 0; i < NO_OF_ATTRACTORS; i++) {
+            // pass in coords, mass, no of particles, and sketch itself
+            sketch.attractors.push(new Attractor(
+                sketch.random(d, sketch.width - d), 
+                sketch.random(sketch.height / 6, sketch.height / 2),
+                m,
+                sketch.floor(sketch.random(50, 100)),
+                sketch
+            ));
+        }
+    }
+
+    function moveAttractor() {
+        // Make sure there is actually an attractor on the go
+        if (!(movingAttractor === undefined)) {
+          let dif = 1.5;
+          let bubDif = 1;
+
+          // move slower in the jelly
+          if (sketch.jelly.containsPos(movingAttractor.pos)) {
+            dif = 1;
+          }
+        
+          if (sketch.keyIsDown(sketch.LEFT_ARROW)) {
+              movingAttractor.pos.x -= dif;
+              for (let particle of movingAttractor.particles) {
+              particle.pos.x -= dif + sketch.random(-bubDif, bubDif);
+              }
+          }
+          if (sketch.keyIsDown(sketch.RIGHT_ARROW)) {
+              movingAttractor.pos.x += dif;
+              for (let particle of movingAttractor.particles) {
+              particle.pos.x += dif + sketch.random(-bubDif, bubDif);
+              }
+          }
+          if (sketch.keyIsDown(sketch.UP_ARROW)) {
+              movingAttractor.pos.y -= dif;
+              for (let particle of movingAttractor.particles) {
+              particle.pos.y -= dif + sketch.random(-bubDif, bubDif);
+              }
+          }
+          if (sketch.keyIsDown(sketch.DOWN_ARROW)) {
+              movingAttractor.pos.y += dif;
+              for (let particle of movingAttractor.particles) {
+              particle.pos.y += dif + sketch.random(-bubDif, bubDif);
+              }
           }
         }
-      }
-
-      // In order to be 'unsubmerged' must have at least 1 bubble not in contact with jelly whatsoever
-      // If submerged, remove from array .
-    } else if (touching_bubbles != attractor.no_of_bubbles) {
-      // Checks that the attractor was in either array to begin with (child or normal)
-
-      if (submerged_attractors.includes(attractor)) {
-        // Removes the attractor from the submerged array.
-        let index = submerged_attractors.indexOf(attractor);
-        submerged_attractors.splice(index, 1);
-
-        setTimeout(checkToBeginMating, 5000);
-      } else if (submerged_children.includes(attractor)) {
-        let index = submerged_children.indexOf(attractor);
-        submerged_children.splice(index, 1);
-      }
     }
-
-    // If the attractor is a child, needs to slowly increment bubbles ...
-    if (attractor.adult == false) {
-      // Can only add bubbles if eye is not in jelly
-      if (!jelly.contains(attractor)) {
-        // Adds more bubbles each second
-        attractor.addBubbles(1);
-
-        // If has max bubbles, then becomes an adult
-        if (attractor.no_of_bubbles == attractor.max_bubbles) {
-          attractor.becomeAdult();
-        }
-      }
-    }
-
-    // Makes sure mating attractors keep in, others  keep out .
-    if (matingInProgress) {
-      if (attractor.mating || attractor.justBorn) {
-        attractor.containedBy(jelly);
-      } else {
-        attractor.bounceOff(jelly);
-      }
-    }
-  }
-
-  for (let attractor of attractors) {
-    // & Apply changes
-    attractor.edges();
-    attractor.move();
-    attractor.draw();
-  }
-
-  // Draw jelly last so that bubbles look like they are underneath
-  jelly.draw();
-}
-
-// If mouse is touching eye of attractor, attractor can move
-function mouseClicked() {
-  for (let attractor of attractors) {
-    checkForMovement(attractor);
-  }
-}
+}, 'attractor');

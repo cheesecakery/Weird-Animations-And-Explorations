@@ -20,9 +20,9 @@ let py = -1;
 let easing = 0.09;
 
 function setup() {
-  let minSide = min(windowWidth, windowHeight);
-  
-  createCanvas(minSide, minSide);
+  let parent = document.getElementById("drag");
+  let canvas = createCanvas(parent.offsetHeight, parent.offsetHeight);
+  canvas.parent(parent);
 
   drawPicture();
 

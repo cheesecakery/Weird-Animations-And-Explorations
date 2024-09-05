@@ -20,9 +20,11 @@ let bg = 247;
 // let noiseSlider;
 
 function setup() {
+  let parent = document.getElementById('arrows');
+
   // creates square canvas + wallpaper texture
-  let minSide = min(windowWidth, windowHeight);
-  createCanvas(minSide, minSide);
+  let canvas = createCanvas(parent.offsetHeight, parent.offsetHeight);
+  canvas.parent(parent);
   drawPicture();
 
   // makes particle in middle of the screen

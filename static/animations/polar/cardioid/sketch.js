@@ -2,12 +2,15 @@ let NO_OF_ROTATORS = 1000;
 let rotators = [];
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let parent = document.getElementById("cardioid");
+  let canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
+  canvas.parent(parent);
+
   background(0);
   
   let minSide = min(width, height);
 
-  let scale = minSide * 0.15;
+  let scaleR = minSide * 0.15;
   let len = minSide * 0.01;
 
   for (let i = 0; i < NO_OF_ROTATORS; i++) {
@@ -15,7 +18,7 @@ function setup() {
     
     // Set inner radius of circle
     let r = sin(100 * st_angle);
-    r *= scale;
+    r *= scaleR;
 
     // spawn in a circle
     let pos = createVector(0, r);

@@ -1,273 +1,203 @@
-class Attractor {
-  constructor(x, y, m, n) {
-    this.pos = createVector(x, y);
+import { Particle } from './particle.js'
+import { randomColour, createText } from './helper.js'
 
-    this.m = m;
-    this.r = sqrt(m) * SIZE;
+export class Attractor {
+    constructor(x, y, m, n, sketch) {
+        this.sketch = sketch;
 
-    this.justBorn = false;
-    this.adult = true;
+        this.pos = sketch.createVector(x, y);
+        this.m = m;
+        this.r = sketch.sqrt(m) * 3;
+        this.rgb = randomColour(sketch);
 
-    this.mating = false;
+        this.max_particles = n;
+        this.particles = [];
 
-    this.dying = false;
+        this.start = sketch.frameCount;
+        this.adult = true;
+        this.mating = false;
+        this.justBorn = false;
 
-    // Get time the attractor was made
-    this.start = frameCount;
-
-    this.no_of_bubbles = n;
-    this.max_bubbles = n;
-
-    this.bubbles = [];
-
-    this.rgb = randColour(0, 255);
-    this.min = 200;
-    this.max = 2000;
-
-    this.createBubbles();
-  }
-
-  //* CREATING / ADDING BUBBLES *//
-
-  // Creates the bubbles to envelop the attractor
-  createBubbles() {
-    let span = (2 * PI) / this.no_of_bubbles;
-
-    for (let i = 0; i < this.no_of_bubbles; i++) {
-      let radius = this.no_of_bubbles * 0.4 * pow(SIZE, 1.1);
-
-      let pos = createVector(0, radius);
-
-      pos.rotate(span * i);
-      pos.add(this.pos);
-
-      let mass = this.m * 5;
-
-      let bubble = new Bubble(pos.x, pos.y, mass, this.rgb);
-      this.bubbles.push(bubble);
-    }
-  }
-
-  // Adds bubbles if attractor is a child
-  addBubbles(step) {
-    let current_time = frameCount;
-    let dif = current_time - this.start;
-
-    // After every 'step' seconds, add another 1-3 bubbles
-    if (dif % (step * 60) == 0) {
-      // Adds 1 to 3 bubbles each time (makes sure doesn't go over max bubbles amount)
-      let rand_amount = ceil(random(3));
-      let a = constrain(rand_amount, 0, this.max_bubbles - this.no_of_bubbles);
-
-      // Creates bubble and adds to array
-      for (let i = 0; i < a; i++) {
-        // Random pos 5 units from bubble
-        let pos = p5.Vector.random2D();
-        pos.setMag(7.5);
-        pos.add(this.pos);
-
-        // Slightly variant colours
-        let rgb = [
-          this.rgb[0] + random(-50, 50),
-          this.rgb[1] + random(-50, 50),
-          this.rgb[2] + random(-50, 50),
-        ];
-
-        let bubble = new Bubble(pos.x, pos.y, this.m * 5, rgb);
-        this.no_of_bubbles++;
-        this.bubbles.push(bubble);
-      }
-    }
-  }
-
-  // Grows the mass, calculates radius accordingly - for when child becomes adult.
-  growBubbles(step) {
-    for (let bubble of this.bubbles) {
-      bubble.m += step;
-      bubble.calculateRadius();
-    }
-  }
-
-  // Updates radius when mass is changed
-  calculateRadius() {
-    this.r = sqrt(this.m) * SIZE;
-  }
-
-  //* FUNCTIONS CHECKING EDGES N ETC *//
-
-  edges() {
-    // Checks if touching bottom / top
-    if (this.pos.y + this.r >= height) {
-      this.pos.y = height - this.r;
-    } else if (this.pos.y - this.r <= 0) {
-      this.pos.y = this.r;
+        this.createParticles();
     }
 
-    // Checks if touching sides
-    if (this.pos.x + this.r >= width) {
-      this.pos.x = width - this.r;
-    } else if (this.pos.x - this.r <= 0) {
-      this.pos.x = this.r;
-    }
-  }
+    createParticles() {
+        let span = (2 * this.sketch.PI) / this.max_particles;
 
-  // Checks if attractor is compacted (haven't used this yet)
-  compacted() {
-    for (let bubble of this.bubbles) {
-      let dist = p5.Vector.sub(this.pos, bubble.pos).mag();
+        for (let i = 0; i < this.max_particles; i++) {
+            let radius = 0.05 * this.sketch.min(this.sketch.width, this.sketch.height);
+            // particles are positioned in a radius around the attractor
+            let pos = this.sketch.createVector(0, radius)
+            pos.rotate(span * i);
+            pos.add(this.pos);
 
-      if (dist > 10) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  containedBy(jelly) {
-    // Check top and bottom
-    if (this.pos.y - this.r <= jelly.y + 2) {
-      this.pos.y = jelly.y + this.r + 2;
-    } else if (this.pos.y + this.r >= jelly.y + jelly.h - 2) {
-      this.pos.y = jelly.y + jelly.h - this.r - 2;
-    }
-
-    // Check sides
-    if (this.pos.x - this.r <= jelly.x + 2) {
-      this.pos.x = jelly.x + this.r + 2;
-    } else if (this.pos.x + this.r >= jelly.x + jelly.w - 2) {
-      this.pos.s = jelly.x + jelly.w - this.r - 2;
-    }
-  }
-
-  collidesWith(jelly) {
-   // Finds the closest point on jelly to the bubble
-    let closestX = constrain(this.pos.x, jelly.x, jelly.x + jelly.w);
-    let closestY = constrain(this.pos.y, jelly.y, jelly.y + jelly.h);
-
-    let distanceX = closestX - this.pos.x;
-    let distanceY = closestY - this.pos.y;
-    let distance = createVector(distanceX, distanceY);
-    
-    if (distance.mag() < this.r) {
-      return true;
-    }
-    
-    return false;
-  }
-
-  // Stops attractors going in mating pit if mating is currently going on
-  bounceOff(jelly) {
-    // If there is collision ?
-    if (this.collidesWith(jelly)) {
-      if (this.pos.x < jelly.x) {
-        this.pos.x = jelly.x - this.r;
-        // Right
-      } else if (this.pos.x > jelly.x + jelly.w) {
-        this.pos.x = jelly.x + jelly.w + this.r;
-      }
-
-      if (this.pos.y < jelly.y) {
-        this.pos.y = jelly.y - this.r;
-        // Bottom
-      } else if (this.pos.y > jelly.y + jelly.h) {
-        this.pos.y = jelly.y + jelly.h + this.r;
-      }
-    }
-  }
-
-  //* 'LIFE' FUNCTIONS *//
-
-  becomeAdult() {
-    this.adult = true;
-
-    this.m = 10;
-    this.calculateRadius();
-
-    this.growBubbles(25);
-
-    let col = color(this.rgb);
-    createText("AHH! your little babe has grown up", col, 3);
-  }
-
-  mateWith(attractor) {
-    matingInProgress = true;
-
-    this.mating = true;
-    attractor.mating = true;
-
-    createText("the mating shall begin!!", "black", 5);
-
-    let a = floor(random(100));
-
-    // 50% chance they successfully mate
-    if (a <= 50) {
-      setTimeout(birthAttractor, 2500 + 2000, this, attractor);
-      // 35% chance of miscarriage
-    } else if (a <= 85) {
-      setTimeout(miscarriage, 2500 + 2500, this, attractor);
-      // 15% chance of duel !!
-    } else {
-      setTimeout(duelling, 2500 + 2500, this, attractor);
-    }
-  }
-
-  // Slowly lose bubbles
-  die() {
-    this.dying = true;
-
-    for (let i = 0; i < this.no_of_bubbles; i++) {
-      setTimeout(() => {
-        this.bubbles.pop();
-      }, 1000 * i * 0.05);
-    }
-  }
-
-  //* MOTION FUNCTIONS **//
-
-  // Exerts force to attract bubble
-  attract(bubble) {
-    // Find distance between the two
-    let force = p5.Vector.sub(this.pos, bubble.pos);
-
-    let distanceSq = constrain(force.magSq(), this.min, this.max);
-
-    let G = 5;
-
-    let constant = (G * (this.m * bubble.m)) / distanceSq;
-
-    force.setMag(constant);
-
-    bubble.applyForce(force);
-  }
-
-  //* CORE FUNCTIONS *//
-
-  // Move attractor, move bubbles
-  move() {
-    for (let bubble of this.bubbles) {
-      this.attract(bubble);
-
-      if (matingInProgress) {
-        if (this.mating || this.justBorn) {
-          bubble.containedBy(jelly);
+            // Create a new particle.
+            this.particles.push( new Particle(
+                this,
+                pos,
+                this.m * 5,
+            ));
         }
-      }
-
-      bubble.move();
-      bubble.draw();
-    }
-  }
-
-  draw() {
-    if (this.dying) {
-      stroke(86, 11, 15);
-      fill(86, 11, 15);
-    } else {
-      stroke(0);
-      fill(0);
     }
 
-    ellipse(this.pos.x, this.pos.y, this.r * 2);
-  }
+    // Contains attractor in sketch.
+    edges() {
+        // Checks if touching bottom / top
+        if (this.pos.y >= this.sketch.height - this.r) {
+            this.pos.y = height - this.r;
+        } else if (this.pos.y <= this.r) {
+            this.pos.y = this.r;
+        }
+
+        // Checks if touching sides
+        if (this.pos.x >= this.sketch.width - this.r) {
+            this.pos.x = width - this.r;
+        } else if (this.pos.x <= this.r) {
+            this.pos.x = this.r;
+        }
+    }
+
+    // Checks whether attractor contains this coordinate
+    contains(x, y) {
+        let dist = p5.Vector.sub(this.pos, this.sketch.createVector(x, y));
+        if (dist.mag() <= this.r) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Count number of submerged particles + apply drag.
+    somewhatSubmergedParticles() {
+        let submergedParticles = 0;
+
+        for (let particle of this.particles) {
+            if (this.sketch.jelly.contains(particle)) {
+                submergedParticles++;
+
+                // Applies drag to each particle
+                let drag = this.sketch.jelly.calculateDrag(particle.vel);
+                particle.applyForce(drag);
+            }
+        }
+
+        return submergedParticles;
+    }
+
+    // Count number of wholly submerged particles.
+    whollySubmergedParticles() {
+        let submergedParticles = 0;
+
+        for (let particle of this.particles) {
+            if (this.sketch.jelly.whollyContains(particle)) {
+                submergedParticles++;
+            }
+        }
+        return submergedParticles;
+    }
+
+    // Exerts force to attract particle
+    attract(particle) {
+        // Find distance between the two - this is the direction of the force.
+        let force = p5.Vector.sub(this.pos, particle.pos);
+        let distanceSq = this.sketch.constrain(force.magSq(), 200, 2000);
+
+        // The magnitude of the attraction is gravitational attraction * mass of attractor * mass of particle,
+        // divided by the distance squared.
+        let constant = (this.sketch.G * (this.m * particle.m)) / distanceSq;
+        force.setMag(constant);
+
+        particle.applyForce(force);
+    }
+
+    die() {
+        this.dying = true;
+
+        // Decrement bubbles every 0.05 seconds.
+        for (let i = 0; i < this.no_of_particles; i++) {
+            setTimeout(() => {
+                this.particles.pop();
+            }, 50 * i);
+        }
+    }
+
+    grow() {
+        // within the jelly, age cannot change .
+        if (!this.sketch.jelly.containsPos(this.pos)) {
+            this.addParticles(1);
+
+            if (this.particles.length == this.max_particles) {
+                this.becomeAdult();
+            }
+        }
+    }
+
+    // Adds bubbles if attractor is a child
+    addParticles(step) {
+        let dif = this.sketch.frameCount - this.start;
+
+        // After every 'step' seconds, add another 1-3 bubbles
+        if (dif % (step * 60) == 0) {
+            // Adds 1 to 3 particles each time (makes sure doesn't go over max number of bubbles)
+            let n = this.sketch.ceil(this.sketch.random(3));
+            n = this.sketch.constrain(n, 0, this.max_particles - this.particles.length);
+
+            // Creates particle and adds to array
+            for (let i = 0; i < n; i++) {
+                // Random position 7.5 units away from center
+                let pos = p5.Vector.random2D();
+                pos.setMag(7.5);
+                pos.add(this.pos);
+
+                this.particles.push(new Particle(
+                    this,
+                    pos,
+                    this.m * 5
+                ));
+            }
+        }
+    }
+
+    // Grows the mass, calculates radius accordingly - for when child becomes adult.
+    enlargeParticles(step) {
+        for (let particle of this.particles) {
+            particle.m += step;
+            particle.calculateRadius();
+        }
+    }
+
+    // Become an adult - increase mass, radius, size of particles
+    becomeAdult() {
+        this.adult = true;
+        this.m = 10;
+        this.r = this.sketch.sqrt(this.m) * 3;
+    
+        this.enlargeParticles(25);
+    
+        let col = this.sketch.color(this.rgb);
+        createText("AHH! your little babe has grown up", col, 3, sketch);
+    }
+
+    // Move particles
+    move() {
+        if (!this.adult) {
+            this.grow();
+        }
+
+        for (let particle of this.particles) {
+            this.attract(particle);
+            particle.move();
+        }
+    }
+
+    // Draw attractor & particles
+    draw() {
+        for (let particle of this.particles) {
+            particle.draw();
+        }
+
+        this.sketch.stroke(0);
+        this.sketch.fill(0);
+        this.sketch.ellipse(this.pos.x, this.pos.y, this.r * 2);
+    }
 }
