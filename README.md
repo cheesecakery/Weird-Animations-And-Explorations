@@ -1,6 +1,6 @@
 # Physics Simulations and Artistic Explorations
 
-[Website here](cheesecakery.eu.pythonanywhere.com)
+[Website here](https://cheesecakery.eu.pythonanywhere.com/wallpaper)
 
 I really enjoy making animations and physics simulations as it feels a blend of the three things I enjoy - programming, maths and art. This was a fun project for me as I was able to model things using concepts in physics while carrying through a whimsicality by adjusting the variables or where things were placed and the like - creating absurd results. I find it fun to create programs which have such visual output :)
 
